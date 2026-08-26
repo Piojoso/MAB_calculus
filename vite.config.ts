@@ -4,8 +4,14 @@ import babel from "@rolldown/plugin-babel";
 import { VitePWA } from "vite-plugin-pwa";
 
 import tailwindcss from "@tailwindcss/vite";
+import path from "path";
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
   plugins: [
     react(),
     tailwindcss(),
