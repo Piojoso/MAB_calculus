@@ -16,6 +16,8 @@ export const useMabCalculus = () => {
   const [advance, setAdvance] = useState(0);
   const [loading, setLoading] = useState(true);
 
+  const [cleanDialogOpen, setCleanDialogOpen] = useState(false);
+
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [newPartName, setNewPartName] = useState("");
   const [newPartPrice, setNewPartPrice] = useState("");
@@ -145,6 +147,7 @@ export const useMabCalculus = () => {
     setRows([emptyRow()]);
     setLabor(0);
     setAdvance(0);
+    setCleanDialogOpen(false);
   }
 
   async function handleShare() {
@@ -192,6 +195,7 @@ export const useMabCalculus = () => {
     newPartName,
     newPartPrice,
     handleAddPart,
+    cleanDialogOpen,
 
     // Actions
     handlePartSelect,
@@ -206,5 +210,6 @@ export const useMabCalculus = () => {
     setNewPartName,
     setNewPartPrice,
     handleShare,
+    setCleanDialogOpen,
   };
 };
