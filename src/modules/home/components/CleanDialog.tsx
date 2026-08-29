@@ -1,5 +1,4 @@
 import {
-  AlertDialogContent,
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogDescription,
@@ -7,33 +6,31 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
-import { useMabCalculus } from "../hooks/useMabCalculus";
 
-export const CleanDialog = () => {
-  const { handleClean, setCleanDialogOpen } = useMabCalculus();
+interface CleanDialogProps {
+  onConfirm: () => void;
+  onCancel: () => void;
+}
 
+export const CleanDialog = ({ onConfirm, onCancel }: CleanDialogProps) => {
   return (
     <>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>¿Limpiar la operación?</AlertDialogTitle>
-          <AlertDialogDescription>
-            Se borrarán los repuestos, la mano de obra y el pago por adelantado.
-            El catálogo de repuestos se mantiene.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => setCleanDialogOpen(false)}>
-            Cancelar
-          </AlertDialogCancel>
-          <AlertDialogAction
-            onClick={handleClean}
-            className="bg-destructive text-destructive-foreground"
-          >
-            Limpiar
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
+      <AlertDialogHeader>
+        <AlertDialogTitle>¿Limpiar la operación?</AlertDialogTitle>
+        <AlertDialogDescription>
+          Se borrarán los repuestos, la mano de obra y el pago por adelantado.
+          El catálogo de repuestos se mantiene.
+        </AlertDialogDescription>
+      </AlertDialogHeader>
+      <AlertDialogFooter>
+        <AlertDialogCancel onClick={onCancel}>Cancelar</AlertDialogCancel>
+        <AlertDialogAction
+          className="bg-destructive text-destructive-foreground"
+          onClick={onConfirm}
+        >
+          Limpiar
+        </AlertDialogAction>
+      </AlertDialogFooter>
     </>
   );
 };

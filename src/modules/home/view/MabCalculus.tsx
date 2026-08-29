@@ -8,12 +8,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { AlertDialog, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useMabCalculus } from "../hooks/useMabCalculus";
 
 import { X, Plus, Share2, Trash2 } from "lucide-react";
 import { formatMoney } from "../helpers/helpers";
-import { CleanDialog } from "../components/CleanDialog";
 
 const ADD_NEW = "__add_new__";
 const EMPTY_PART = "__empty__";
@@ -34,7 +32,6 @@ export const MabCalculus = () => {
     newPartName,
     newPartPrice,
     handleAddPart,
-    cleanDialogOpen,
 
     // Actions
     handlePartSelect,
@@ -48,7 +45,7 @@ export const MabCalculus = () => {
     setNewPartName,
     setNewPartPrice,
     handleShare,
-    setCleanDialogOpen,
+    handleOpenCleanDialog,
   } = useMabCalculus();
 
   if (loading) {
@@ -77,20 +74,16 @@ export const MabCalculus = () => {
               </h2>
               <p className="text-xs text-muted-foreground">{todayLabel()}</p>
             </div>
-            <AlertDialog open={cleanDialogOpen}>
-              <AlertDialogTrigger>
-                <Button
-                  onClick={() => setCleanDialogOpen(true)}
-                  variant="ghost"
-                  size="sm"
-                  className="h-8 text-xs text-muted-foreground hover:text-destructive"
-                >
-                  <Trash2 className="mr-1 h-3.5 w-3.5" />
-                  Limpiar
-                </Button>
-              </AlertDialogTrigger>
-              <CleanDialog />
-            </AlertDialog>
+
+            <Button
+              onClick={handleOpenCleanDialog}
+              variant="ghost"
+              size="sm"
+              className="h-8 text-xs text-muted-foreground hover:text-destructive"
+            >
+              <Trash2 className="mr-1 h-3.5 w-3.5" />
+              Limpiar
+            </Button>
           </div>
 
           <section className="space-y-3">

@@ -5,18 +5,20 @@ import type { RepairPart, Row } from "../interfaces";
 // import { toPng } from "html-to-image";
 
 import { addPart, clearDraft, getDraft, getParts, saveDraft } from "@/lib/db";
+import { useAlert } from "@/providers/AlertDialogProvider";
+import { CleanDialog } from "../components/CleanDialog";
 
 const ADD_NEW = "__add_new__";
 const EMPTY_PART = "__empty__";
 
 export const useMabCalculus = () => {
+  const { closeDialog, openDialog } = useAlert();
+
   const [parts, setParts] = useState<RepairPart[]>([]);
   const [rows, setRows] = useState<Row[]>([emptyRow()]);
   const [labor, setLabor] = useState(0);
   const [advance, setAdvance] = useState(0);
   const [loading, setLoading] = useState(true);
-
-  const [cleanDialogOpen, setCleanDialogOpen] = useState(false);
 
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [newPartName, setNewPartName] = useState("");
@@ -84,6 +86,7 @@ export const useMabCalculus = () => {
       ),
     [rows],
   );
+
   const balance = partsSubtotal - advance;
   const total = balance + labor;
 
@@ -147,7 +150,7 @@ export const useMabCalculus = () => {
     setRows([emptyRow()]);
     setLabor(0);
     setAdvance(0);
-    setCleanDialogOpen(false);
+    closeDialog();
   }
 
   async function handleShare() {
@@ -180,6 +183,10 @@ export const useMabCalculus = () => {
     // link.click();
   }
 
+  const handleOpenCleanDialog = () => {
+    openDialog(<CleanDialog onConfirm={handleClean} onCancel={closeDialog} />);
+  };
+
   return {
     // Props
     loading,
@@ -195,7 +202,6 @@ export const useMabCalculus = () => {
     newPartName,
     newPartPrice,
     handleAddPart,
-    cleanDialogOpen,
 
     // Actions
     handlePartSelect,
@@ -210,6 +216,7 @@ export const useMabCalculus = () => {
     setNewPartName,
     setNewPartPrice,
     handleShare,
-    setCleanDialogOpen,
+
+    handleOpenCleanDialog,
   };
 };
