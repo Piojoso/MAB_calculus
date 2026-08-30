@@ -1,17 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { useMabCalculus } from "../hooks/useMabCalculus";
-
 import { Share2 } from "lucide-react";
+
 import { formatMoney } from "../helpers/helpers";
+
+import { useMabCalculus } from "../hooks/useMabCalculus";
 import { MabCalculusHeader } from "../components/MabCalculusHeader";
 import { RepairParts } from "../components/RepairParts";
 import { ClientData } from "../components/ClientData";
@@ -26,17 +20,10 @@ export const MabCalculus = () => {
     balance,
     labor,
     total,
-    addDialogOpen,
-    newPartName,
-    newPartPrice,
-    handleAddPart,
 
     // Actions
     setAdvance,
     setLabor,
-    setAddDialogOpen,
-    setNewPartName,
-    setNewPartPrice,
     handleShare,
   } = useMabCalculus();
 

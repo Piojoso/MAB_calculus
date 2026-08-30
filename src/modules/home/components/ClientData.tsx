@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { CircleCheck, Pencil, Plus, Save } from "lucide-react";
+import { CircleCheck, Pencil } from "lucide-react";
 
 import { useClientData } from "../hooks/useClientData";
 import { useState } from "react";
