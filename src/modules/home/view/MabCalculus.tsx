@@ -14,6 +14,7 @@ import { Share2 } from "lucide-react";
 import { formatMoney } from "../helpers/helpers";
 import { MabCalculusHeader } from "../components/MabCalculusHeader";
 import { RepairParts } from "../components/RepairParts";
+import { ClientData } from "../components/ClientData";
 
 export const MabCalculus = () => {
   const {
@@ -60,6 +61,10 @@ export const MabCalculus = () => {
         <div ref={receiptRef} className="rounded-2xl bg-card p-5 shadow-lg">
           {/* Header */}
           <MabCalculusHeader />
+
+          <hr className="my-4" />
+
+          <ClientData />
 
           <hr className="my-4" />
 
