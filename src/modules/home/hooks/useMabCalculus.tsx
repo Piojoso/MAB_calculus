@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { emptyRow, todayLabel } from "../helpers/helpers";
+import { emptyRow } from "../helpers/helpers";
 import type { RepairPart, Row } from "../interfaces";
 
 // import { toPng } from "html-to-image";
@@ -206,7 +206,7 @@ export const useMabCalculus = () => {
     // Actions
     handlePartSelect,
     handleClean,
-    todayLabel,
+
     updateRow,
     removeRow,
     addRow,

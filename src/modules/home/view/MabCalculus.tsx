@@ -10,8 +10,9 @@ import {
 } from "@/components/ui/dialog";
 import { useMabCalculus } from "../hooks/useMabCalculus";
 
-import { X, Plus, Share2, Trash2 } from "lucide-react";
+import { X, Plus, Share2 } from "lucide-react";
 import { formatMoney } from "../helpers/helpers";
+import { MabCalculusHeader } from "../components/MabCalculusHeader";
 
 const ADD_NEW = "__add_new__";
 const EMPTY_PART = "__empty__";
@@ -35,7 +36,6 @@ export const MabCalculus = () => {
 
     // Actions
     handlePartSelect,
-    todayLabel,
     updateRow,
     removeRow,
     addRow,
@@ -45,7 +45,6 @@ export const MabCalculus = () => {
     setNewPartName,
     setNewPartPrice,
     handleShare,
-    handleOpenCleanDialog,
   } = useMabCalculus();
 
   if (loading) {
@@ -67,24 +66,10 @@ export const MabCalculus = () => {
         </div>
 
         <div ref={receiptRef} className="rounded-2xl bg-card p-5 shadow-lg">
-          <div className="mb-4 flex items-start justify-between border-b border-border pb-3">
-            <div>
-              <h2 className="text-lg font-bold text-card-foreground">
-                Presupuesto de reparación
-              </h2>
-              <p className="text-xs text-muted-foreground">{todayLabel()}</p>
-            </div>
+          {/* Header */}
+          <MabCalculusHeader />
 
-            <Button
-              onClick={handleOpenCleanDialog}
-              variant="ghost"
-              size="sm"
-              className="h-8 text-xs text-muted-foreground hover:text-destructive"
-            >
-              <Trash2 className="mr-1 h-3.5 w-3.5" />
-              Limpiar
-            </Button>
-          </div>
+          <hr className="my-4" />
 
           <section className="space-y-3">
             <div className="flex items-center justify-between">
