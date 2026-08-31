@@ -10,32 +10,44 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus, X } from "lucide-react";
 
-import { useMabCalculus } from "../hooks/useMabCalculus";
+import type { RepairPart, Row } from "../interfaces";
 
 const ADD_NEW = "__add_new__";
 const EMPTY_PART = "__empty__";
 
-export const RepairParts = () => {
-  const {
-    // State
-    rows,
-    parts,
+interface Props {
+  rows: Row[];
+  parts: RepairPart[];
+  addDialogOpen: boolean;
+  newPartName: string;
+  newPartPrice: string;
 
-    // Actions
-    handlePartSelect,
-    updateRow,
-    removeRow,
-    addRow,
+  handlePartSelect: (rowId: string, value: string) => void;
+  updateRow: (id: string, patch: Partial<Row>) => void;
+  removeRow: (id: string) => void;
+  addRow: () => void;
+  setAddDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setNewPartName: React.Dispatch<React.SetStateAction<string>>;
+  setNewPartPrice: React.Dispatch<React.SetStateAction<string>>;
+  handleAddPart: () => void;
+}
 
-    addDialogOpen,
-    setAddDialogOpen,
-    newPartName,
-    setNewPartName,
-    newPartPrice,
-    setNewPartPrice,
-    handleAddPart,
-  } = useMabCalculus();
+export const RepairParts = ({
+  rows,
+  parts,
+  addDialogOpen,
+  newPartName,
+  newPartPrice,
 
+  handlePartSelect,
+  updateRow,
+  removeRow,
+  addRow,
+  setAddDialogOpen,
+  setNewPartName,
+  setNewPartPrice,
+  handleAddPart,
+}: Props) => {
   return (
     <>
       <section className="space-y-3">

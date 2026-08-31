@@ -12,6 +12,8 @@ import { ClientData } from "../components/ClientData";
 
 export const MabCalculus = () => {
   const {
+    repairParts,
+
     // Props
     loading,
     receiptRef,
@@ -55,7 +57,7 @@ export const MabCalculus = () => {
 
           <hr className="my-4" />
 
-          <RepairParts />
+          <RepairParts {...repairParts} />
 
           <hr className="my-4" />
 
