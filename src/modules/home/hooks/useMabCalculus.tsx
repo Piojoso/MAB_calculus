@@ -7,11 +7,13 @@ import { clearDraft, getDraft, getParts, saveDraft } from "@/lib/db";
 import { useAlert } from "@/providers/AlertDialogProvider";
 import { CleanDialog } from "../components/CleanDialog";
 import { useRepairParts } from "./useRepairParts";
+import { useClientData } from "./useClientData";
 
 export const useMabCalculus = () => {
   const { closeDialog, openDialog } = useAlert();
 
   const repairParts = useRepairParts();
+  const clientData = useClientData();
 
   const [labor, setLabor] = useState(0);
   const [advance, setAdvance] = useState(0);
@@ -126,6 +128,7 @@ export const useMabCalculus = () => {
 
   return {
     repairParts,
+    clientData,
 
     // Props
     loading,

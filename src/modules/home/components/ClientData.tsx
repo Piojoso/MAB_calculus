@@ -1,14 +1,20 @@
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CircleCheck, Pencil } from "lucide-react";
 
-import { useClientData } from "../hooks/useClientData";
 import { useState } from "react";
+import { CustomInput } from "@/components/custom/CustomInput";
 
-export const ClientData = () => {
-  const { name, address, phone, setName, setAddress, setPhone } =
-    useClientData();
+interface Props {
+  name: string;
+  address: string;
+  phone: string;
 
+  setName: React.Dispatch<React.SetStateAction<string>>;
+  setAddress: React.Dispatch<React.SetStateAction<string>>;
+  setPhone: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export const ClientData = (props: Props) => {
   const [isEditing, setIsEditing] = useState(false);
 
   return (
@@ -32,25 +38,21 @@ export const ClientData = () => {
       {!isEditing && (
         <div className="space-y-2">
           <div className="grid grid-rows gap-2">
-            <div className="flex justify-between h-10 text-sm">
+            <div className="flex gap-1 text-sm">
               <span className="text-muted-foreground">Nombre:</span>
-              <span className="font-medium text-foreground">
-                {/* {formatMoney(partsSubtotal)} */}
-              </span>
+              <span className="font-medium text-foreground">{props.name}</span>
             </div>
 
-            <div className="flex justify-between h-10 text-sm">
+            <div className="flex gap-1 text-sm">
               <span className="text-muted-foreground">Dirección:</span>
               <span className="font-medium text-foreground">
-                {/* − {formatMoney(advance)} */}
+                {props.address}
               </span>
             </div>
 
-            <div className="flex justify-between h-10 text-sm">
+            <div className="flex gap-1 text-sm">
               <span className="text-muted-foreground">Teléfono:</span>
-              <span className="font-medium text-foreground">
-                {/* − {formatMoney(advance)} */}
-              </span>
+              <span className="font-medium text-foreground">{props.phone}</span>
             </div>
           </div>
         </div>
@@ -60,21 +62,24 @@ export const ClientData = () => {
       {isEditing && (
         <div className="space-y-2">
           <div className="grid grid-rows gap-2">
-
-            <Input
-              className="h-10 px-2 text-sm"
-              inputMode="text"
-              placeholder="Dirección"
-              value={address || ""}
-              onChange={(e) => setAddress(e.target.value || "")}
+            <CustomInput
+              placeholder="Nombre"
+              onChange={(e) => props.setName(e.target.value || "")}
+              value={props.name || ""}
             />
 
-            <Input
+            <CustomInput
+              inputMode="text"
+              placeholder="Dirección"
+              value={props.address || ""}
+              onChange={(e) => props.setAddress(e.target.value || "")}
+            />
+
+            <CustomInput
               placeholder="Teléfono"
-              className="h-10 px-2 text-sm"
               inputMode="tel"
-              value={phone || ""}
-              onChange={(e) => setPhone(e.target.value || "")}
+              value={props.phone || ""}
+              onChange={(e) => props.setPhone(e.target.value || "")}
             />
           </div>
 
