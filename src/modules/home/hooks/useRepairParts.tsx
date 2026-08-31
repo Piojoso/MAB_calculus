@@ -49,7 +49,7 @@ export const useRepairParts = () => {
     setRows((prev) => [...prev, emptyRow()]);
   }
 
-  function handleAddPart() {
+  function handleAddNewPart() {
     const name = newPartName.trim();
     const price = Number.parseFloat(newPartPrice);
     if (!name || !Number.isFinite(price)) return;
@@ -90,6 +90,6 @@ export const useRepairParts = () => {
     updateRow,
     removeRow,
     addRow,
-    handleAddPart,
+    handleAddNewPart,
   };
 };

@@ -29,25 +29,10 @@ interface Props {
   setAddDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setNewPartName: React.Dispatch<React.SetStateAction<string>>;
   setNewPartPrice: React.Dispatch<React.SetStateAction<string>>;
-  handleAddPart: () => void;
+  handleAddNewPart: () => void;
 }
 
-export const RepairParts = ({
-  rows,
-  parts,
-  addDialogOpen,
-  newPartName,
-  newPartPrice,
-
-  handlePartSelect,
-  updateRow,
-  removeRow,
-  addRow,
-  setAddDialogOpen,
-  setNewPartName,
-  setNewPartPrice,
-  handleAddPart,
-}: Props) => {
+export const RepairParts = (props: Props) => {
   return (
     <>
       <section className="space-y-3">
@@ -58,18 +43,18 @@ export const RepairParts = ({
         </div>
 
         <div className="space-y-2">
-          {rows.map((row) => (
+          {props.rows.map((row) => (
             <div
               key={row.id}
               className="grid grid-cols-[1fr_7rem_auto] items-center gap-2"
             >
               <select
                 value={row.partId ?? EMPTY_PART}
-                onChange={(e) => handlePartSelect(row.id, e.target.value)}
+                onChange={(e) => props.handlePartSelect(row.id, e.target.value)}
                 className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <option value={EMPTY_PART}>Seleccionar repuesto</option>
-                {parts.map((part) => (
+                {props.parts.map((part) => (
                   <option key={part.id} value={part.id}>
                     {part.name}
                   </option>
@@ -84,7 +69,7 @@ export const RepairParts = ({
                 min={0}
                 value={row.price || ""}
                 onChange={(e) =>
-                  updateRow(row.id, {
+                  props.updateRow(row.id, {
                     price: Number.parseFloat(e.target.value) || 0,
                   })
                 }
@@ -96,7 +81,7 @@ export const RepairParts = ({
                 variant="ghost"
                 size="icon"
                 className="h-10 w-10 text-muted-foreground hover:text-destructive"
-                onClick={() => removeRow(row.id)}
+                onClick={() => props.removeRow(row.id)}
                 aria-label="Eliminar repuesto"
               >
                 <X className="h-4 w-4" />
@@ -108,7 +93,7 @@ export const RepairParts = ({
         <Button
           variant="secondary"
           size="sm"
-          onClick={addRow}
+          onClick={props.addRow}
           className="w-full"
         >
           <Plus className="mr-1 h-4 w-4" />
@@ -116,7 +101,7 @@ export const RepairParts = ({
         </Button>
       </section>
 
-      <Dialog open={addDialogOpen} onOpenChange={setAddDialogOpen}>
+      <Dialog open={props.addDialogOpen} onOpenChange={props.setAddDialogOpen}>
         <DialogContent className="sm:max-w-xs">
           <DialogHeader>
             <DialogTitle>Agregar nuevo repuesto</DialogTitle>
@@ -131,8 +116,8 @@ export const RepairParts = ({
               </Label>
               <Input
                 id="new-part-name"
-                value={newPartName}
-                onChange={(e) => setNewPartName(e.target.value)}
+                value={props.newPartName}
+                onChange={(e) => props.setNewPartName(e.target.value)}
                 placeholder="Ej: Compresor"
                 className="mt-1 h-11"
                 autoFocus
@@ -148,15 +133,18 @@ export const RepairParts = ({
                 inputMode="decimal"
                 step="0.01"
                 min={0}
-                value={newPartPrice}
-                onChange={(e) => setNewPartPrice(e.target.value)}
+                value={props.newPartPrice}
+                onChange={(e) => props.setNewPartPrice(e.target.value)}
                 placeholder="0"
                 className="mt-1 h-11 text-right"
               />
             </div>
             <Button
-              onClick={handleAddPart}
-              disabled={!newPartName.trim() || !Number.parseFloat(newPartPrice)}
+              onClick={props.handleAddNewPart}
+              disabled={
+                !props.newPartName.trim() ||
+                !Number.parseFloat(props.newPartPrice)
+              }
               className="w-full"
             >
               Guardar repuesto
