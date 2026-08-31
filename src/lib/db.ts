@@ -1,7 +1,7 @@
 import type {
-  ClientData,
+  DraftClientData,
   DraftQuote,
-  PartData,
+  DraftPartData,
   RepairPart,
 } from "@/modules/home/interfaces";
 import type { Dexie, EntityTable } from "dexie";
@@ -55,8 +55,8 @@ export async function getDraft(): Promise<DraftQuote | undefined> {
 }
 
 export async function saveDraft(
-  clientData: ClientData,
-  parts: PartData[],
+  clientData: DraftClientData,
+  parts: DraftPartData[],
   labor: number,
   advance: number,
 ): Promise<void> {

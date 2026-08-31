@@ -1,21 +1,36 @@
-import { Button } from "@/components/ui/button";
-import { CircleCheck, Pencil } from "lucide-react";
-
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Pencil } from "lucide-react";
+import {
+  Dialog,
+  DialogDescription,
+  DialogTitle,
+  DialogContent,
+  DialogHeader,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+
 import { CustomInput } from "@/components/custom/CustomInput";
+import type { DraftClientData } from "../interfaces";
 
 interface Props {
   name: string;
   address: string;
   phone: string;
+  isEditing: boolean;
 
   setName: React.Dispatch<React.SetStateAction<string>>;
   setAddress: React.Dispatch<React.SetStateAction<string>>;
   setPhone: React.Dispatch<React.SetStateAction<string>>;
+  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
+
+  handleAddClientData: (clientData: DraftClientData) => void;
 }
 
 export const ClientData = (props: Props) => {
-  const [isEditing, setIsEditing] = useState(false);
+  const [localName, setLocalName] = useState(props.name);
+  const [localAddress, setLocalAddress] = useState(props.address);
+  const [localPhone, setLocalPhone] = useState(props.phone);
 
   return (
     <section className="space-y-3">
@@ -24,7 +39,7 @@ export const ClientData = (props: Props) => {
           Información del Cliente
         </h3>
         <Button
-          onClick={() => setIsEditing((prev) => !prev)}
+          onClick={() => props.setIsEditing((prev) => !prev)}
           variant="ghost"
           size="sm"
           className="h-8 text-xs text-muted-foreground hover:text-destructive"
@@ -34,61 +49,92 @@ export const ClientData = (props: Props) => {
         </Button>
       </div>
 
-      {/* View */}
-      {!isEditing && (
-        <div className="space-y-2">
-          <div className="grid grid-rows gap-2">
-            <div className="flex gap-1 text-sm">
-              <span className="text-muted-foreground">Nombre:</span>
-              <span className="font-medium text-foreground">{props.name}</span>
-            </div>
-
-            <div className="flex gap-1 text-sm">
-              <span className="text-muted-foreground">Dirección:</span>
-              <span className="font-medium text-foreground">
-                {props.address}
-              </span>
-            </div>
-
-            <div className="flex gap-1 text-sm">
-              <span className="text-muted-foreground">Teléfono:</span>
-              <span className="font-medium text-foreground">{props.phone}</span>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Edits */}
-      {isEditing && (
-        <div className="space-y-2">
-          <div className="grid grid-rows gap-2">
-            <CustomInput
-              placeholder="Nombre"
-              onChange={(e) => props.setName(e.target.value || "")}
-              value={props.name || ""}
-            />
-
-            <CustomInput
-              inputMode="text"
-              placeholder="Dirección"
-              value={props.address || ""}
-              onChange={(e) => props.setAddress(e.target.value || "")}
-            />
-
-            <CustomInput
-              placeholder="Teléfono"
-              inputMode="tel"
-              value={props.phone || ""}
-              onChange={(e) => props.setPhone(e.target.value || "")}
-            />
+      <div className="space-y-2">
+        <div className="grid grid-rows gap-2">
+          <div className="flex gap-1 text-sm">
+            <span className="text-muted-foreground">Nombre:</span>
+            <span className="font-medium text-foreground">{props.name}</span>
           </div>
 
-          <Button variant="secondary" size="sm" className="w-full">
-            <CircleCheck className="mr-1 h-4 w-4" />
-            Actualizar Información
-          </Button>
+          <div className="flex gap-1 text-sm">
+            <span className="text-muted-foreground">Dirección:</span>
+            <span className="font-medium text-foreground">{props.address}</span>
+          </div>
+
+          <div className="flex gap-1 text-sm">
+            <span className="text-muted-foreground">Teléfono:</span>
+            <span className="font-medium text-foreground">{props.phone}</span>
+          </div>
         </div>
-      )}
+      </div>
+
+      <Dialog open={props.isEditing} onOpenChange={props.setIsEditing}>
+        <DialogContent className="sm:max-w-xs">
+          <DialogHeader>
+            <DialogTitle>Agregar Información del Cliente</DialogTitle>
+            <DialogDescription>
+              Se usará para reconocerlo facilmente
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3 pt-2">
+            <div>
+              <Label htmlFor="client-name" className="text-sm">
+                Nombre
+              </Label>
+              <CustomInput
+                id="client-name"
+                placeholder="Ej: Miguel Angel"
+                value={localName || ""}
+                defaultValue={props.name || ""}
+                onChange={(e) => setLocalName(e.target.value || "")}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="client-address" className="text-sm">
+                Dirección
+              </Label>
+              <CustomInput
+                id="client-address"
+                inputMode="text"
+                placeholder="Ej: Calle falsa 123"
+                value={localAddress || ""}
+                defaultValue={props.address || ""}
+                onChange={(e) => setLocalAddress(e.target.value || "")}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="client-phone" className="text-sm">
+                Teléfono
+              </Label>
+              <CustomInput
+                id="client-phone"
+                placeholder="Ej: 0303 456 1111"
+                inputMode="tel"
+                value={localPhone || ""}
+                defaultValue={props.phone || ""}
+                onChange={(e) => setLocalPhone(e.target.value || "")}
+              />
+            </div>
+            <Button
+              onClick={() =>
+                props.handleAddClientData({
+                  name: localName,
+                  address: localAddress,
+                  phone: localPhone,
+                })
+              }
+              disabled={
+                !localName.trim() || !localAddress.trim() || !localPhone.trim()
+              }
+              className="w-full"
+            >
+              Actualizar Información
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };

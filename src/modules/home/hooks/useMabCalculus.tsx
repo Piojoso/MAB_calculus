@@ -33,6 +33,8 @@ export const useMabCalculus = () => {
 
       repairParts.setParts(catalog);
       if (draft) {
+        clientData.setClientData(draft.clientData);
+
         repairParts.setRows(
           draft.parts.length
             ? draft.parts.map((p) => ({
