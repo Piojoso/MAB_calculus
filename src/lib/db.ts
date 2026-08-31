@@ -1,4 +1,9 @@
-import type { DraftQuote, RepairPart } from "@/modules/home/interfaces";
+import type {
+  ClientData,
+  DraftQuote,
+  PartData,
+  RepairPart,
+} from "@/modules/home/interfaces";
 import type { Dexie, EntityTable } from "dexie";
 
 type RepairQuoteDb = Dexie & {
@@ -50,27 +55,26 @@ export async function getDraft(): Promise<DraftQuote | undefined> {
 }
 
 export async function saveDraft(
-  parts: { partId: number | null; price: number }[],
+  clientData: ClientData,
+  parts: PartData[],
   labor: number,
   advance: number,
 ): Promise<void> {
   const db = await getDb();
   const existing = await db.draft.get(DRAFT_ID);
+
+  const draftBody = {
+    clientData,
+    parts,
+    labor,
+    advance,
+    updatedAt: Date.now(),
+  };
+
   if (existing) {
-    await db.draft.update(DRAFT_ID, {
-      parts,
-      labor,
-      advance,
-      updatedAt: Date.now(),
-    });
+    await db.draft.update(DRAFT_ID, draftBody);
   } else {
-    await db.draft.add({
-      id: DRAFT_ID,
-      parts,
-      labor,
-      advance,
-      updatedAt: Date.now(),
-    });
+    await db.draft.add({ id: DRAFT_ID, ...draftBody });
   }
 }
 

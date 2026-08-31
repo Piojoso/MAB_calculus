@@ -60,7 +60,14 @@ export const useMabCalculus = () => {
     if (!initialLoadRef.current) return;
 
     const timeout = setTimeout(() => {
+      const client = {
+        name: clientData.name,
+        address: clientData.address,
+        phone: clientData.phone,
+      };
+
       saveDraft(
+        client,
         repairParts.rows.map((r) => ({ partId: r.partId, price: r.price })),
         labor,
         advance,
