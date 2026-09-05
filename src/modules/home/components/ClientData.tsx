@@ -32,6 +32,13 @@ export const ClientData = (props: Props) => {
   const [localAddress, setLocalAddress] = useState(props.address);
   const [localPhone, setLocalPhone] = useState(props.phone);
 
+  const handleToggleEditing = () => {
+    setLocalName(props.name);
+    setLocalAddress(props.address);
+    setLocalPhone(props.phone);
+    props.setIsEditing((prev) => !prev);
+  };
+
   return (
     <section className="space-y-3">
       <div className="flex items-center justify-between">
@@ -39,7 +46,7 @@ export const ClientData = (props: Props) => {
           Información del Cliente
         </h3>
         <Button
-          onClick={() => props.setIsEditing((prev) => !prev)}
+          onClick={handleToggleEditing}
           variant="ghost"
           size="sm"
           className="h-8 text-xs text-muted-foreground hover:text-destructive"

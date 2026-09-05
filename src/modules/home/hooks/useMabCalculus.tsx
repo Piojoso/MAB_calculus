@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { emptyRow } from "../helpers/helpers";
 
 // import { toPng } from "html-to-image";
@@ -31,11 +31,11 @@ export const useMabCalculus = () => {
       const draft = await getDraft();
       if (cancelled) return;
 
-      repairParts.setParts(catalog);
+      repairParts.actions.setParts(catalog);
       if (draft) {
-        clientData.setClientData(draft.clientData);
+        clientData.actions.setClientData(draft.clientData);
 
-        repairParts.setRows(
+        repairParts.actions.setRows(
           draft.parts.length
             ? draft.parts.map((p) => ({
                 id: Math.random().toString(36).slice(2),
@@ -63,14 +63,17 @@ export const useMabCalculus = () => {
 
     const timeout = setTimeout(() => {
       const client = {
-        name: clientData.name,
-        address: clientData.address,
-        phone: clientData.phone,
+        name: clientData.state.name,
+        address: clientData.state.address,
+        phone: clientData.state.phone,
       };
 
       saveDraft(
         client,
-        repairParts.rows.map((r) => ({ partId: r.partId, price: r.price })),
+        repairParts.state.rows.map((r) => ({
+          partId: r.partId,
+          price: r.price,
+        })),
         labor,
         advance,
       ).catch(() => {
@@ -79,29 +82,33 @@ export const useMabCalculus = () => {
     }, 300);
 
     return () => clearTimeout(timeout);
-  }, [repairParts.rows, labor, advance]);
+  }, [clientData.state, repairParts.state, labor, advance]);
 
   const partsSubtotal = useMemo(
     () =>
-      repairParts.rows.reduce(
+      repairParts.state.rows.reduce(
         (sum, row) => sum + (Number.isFinite(row.price) ? row.price : 0),
         0,
       ),
-    [repairParts.rows],
+    [repairParts],
   );
 
   const balance = partsSubtotal - advance;
   const total = balance + labor;
 
-  function handleClean() {
+  const handleClean = useCallback(() => {
     clearDraft().catch(() => {});
-    repairParts.setRows([emptyRow()]);
+
+    clientData.actions.resetClientData();
+    repairParts.actions.resetRepairParts();
+
     setLabor(0);
     setAdvance(0);
-    closeDialog();
-  }
 
-  async function handleShare() {
+    closeDialog();
+  }, [clientData, repairParts, closeDialog]);
+
+  const handleShare = useCallback(async () => {
     if (!receiptRef.current) return;
 
     // const dataUrl = await toPng(receiptRef.current, {
@@ -129,32 +136,45 @@ export const useMabCalculus = () => {
     // link.href = dataUrl;
     // link.download = "presupuesto.png";
     // link.click();
-  }
+  }, []);
 
-  const handleOpenCleanDialog = () => {
+  const handleOpenCleanDialog = useCallback(() => {
     openDialog(<CleanDialog onConfirm={handleClean} onCancel={closeDialog} />);
-  };
+  }, []);
 
-  return {
-    repairParts,
-    clientData,
+  return useMemo(
+    () => ({
+      repairParts,
+      clientData,
 
-    // Props
-    loading,
-    receiptRef,
-    partsSubtotal,
-    advance,
-    balance,
-    labor,
-    total,
+      state: {
+        loading,
+        receiptRef,
+        partsSubtotal,
+        advance,
+        balance,
+        labor,
+        total,
+      },
 
-    // Actions
+      actions: {
+        handleClean,
+        setAdvance,
+        setLabor,
+        handleShare,
 
-    handleClean,
-    setAdvance,
-    setLabor,
-    handleShare,
-
-    handleOpenCleanDialog,
-  };
+        handleOpenCleanDialog,
+      },
+    }),
+    [
+      clientData,
+      repairParts,
+      loading,
+      receiptRef,
+      partsSubtotal,
+      advance,
+      labor,
+      total,
+    ],
+  );
 };

@@ -1,12 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 
-import { useMabCalculus } from "../hooks/useMabCalculus";
 import { todayLabel } from "../helpers/helpers";
 
-export const MabCalculusHeader = () => {
-  const { handleOpenCleanDialog } = useMabCalculus();
+interface Props {
+  handleOpenCleanDialog: () => void;
+}
 
+export const MabCalculusHeader = ({ handleOpenCleanDialog }: Props) => {
   return (
     <div className="flex items-start justify-between">
       <div>

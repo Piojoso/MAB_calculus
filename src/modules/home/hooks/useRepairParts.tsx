@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { emptyRow } from "../helpers/helpers";
 import type { RepairPart, Row } from "../interfaces";
 import { addPart } from "@/lib/db";
@@ -71,25 +71,47 @@ export const useRepairParts = () => {
     });
   }
 
-  return {
-    rows,
-    parts,
-    addDialogOpen,
-    newPartName,
-    newPartPrice,
-    pendingRowId,
+  const resetRepairParts = useCallback(() => {
+    setRows([emptyRow()]);
+  }, []);
 
-    setParts,
-    setRows,
-    setAddDialogOpen,
-    setNewPartName,
-    setNewPartPrice,
-    setPendingRowId,
+  return useMemo(
+    () => ({
+      state: {
+        rows,
+        parts,
+        addDialogOpen,
+        newPartName,
+        newPartPrice,
+        pendingRowId,
+      },
+      actions: {
+        setParts,
+        setRows,
+        setAddDialogOpen,
+        setNewPartName,
+        setNewPartPrice,
+        setPendingRowId,
 
-    handlePartSelect,
-    updateRow,
-    removeRow,
-    addRow,
-    handleAddNewPart,
-  };
+        handlePartSelect,
+        updateRow,
+        removeRow,
+        addRow,
+        handleAddNewPart,
+
+        resetRepairParts,
+      },
+    }),
+    [
+      rows,
+      parts,
+      addDialogOpen,
+      newPartName,
+      newPartPrice,
+      pendingRowId,
+      handlePartSelect,
+      handleAddNewPart,
+      resetRepairParts,
+    ],
+  );
 };
