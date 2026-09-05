@@ -3,11 +3,15 @@ import { MabCalculusHeader } from "../components/MabCalculusHeader";
 import { RepairParts } from "../components/RepairParts";
 import { ClientData } from "../components/ClientData";
 import { MabTotals } from "../components/MabTotals";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Share2 } from "lucide-react";
 
 export const MabCalculus = () => {
-  const { repairParts, clientData, ...restUseMabCalculus } = useMabCalculus();
+  const { repairParts, clientData, ...store } = useMabCalculus();
 
-  if (restUseMabCalculus.state.loading) {
+  if (store.state.loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <span className="text-sm text-muted-foreground">Cargando…</span>
@@ -26,11 +30,11 @@ export const MabCalculus = () => {
         </div>
 
         <div
-          ref={restUseMabCalculus.state.receiptRef}
+          ref={store.state.receiptRef}
           className="rounded-2xl bg-card p-5 shadow-lg"
         >
           {/* Header */}
-          <MabCalculusHeader {...restUseMabCalculus.actions} />
+          <MabCalculusHeader {...store.actions} />
 
           <hr className="my-4" />
           {clientData.state.name}
@@ -42,14 +46,11 @@ export const MabCalculus = () => {
 
           <hr className="my-4" />
 
-          <MabTotals
-            {...restUseMabCalculus.state}
-            {...restUseMabCalculus.actions}
-          />
+          <MabTotals {...store.state} {...store.actions} />
         </div>
 
         {/* Inputs for labor and advance live outside the receipt so they don't show on the screenshot. */}
-        {/* <div className="mt-5 space-y-4 rounded-xl bg-card p-4 shadow-sm">
+        <div className="mt-5 space-y-4 rounded-xl bg-card p-4 shadow-sm">
           <div>
             <Label htmlFor="advance" className="text-sm text-muted-foreground">
               Pago por adelantado
@@ -60,9 +61,9 @@ export const MabCalculus = () => {
               inputMode="decimal"
               step="0.01"
               min={0}
-              value={advance || ""}
+              value={store.state.advance || ""}
               onChange={(e) =>
-                setAdvance(Number.parseFloat(e.target.value) || 0)
+                store.actions.setAdvance(Number.parseFloat(e.target.value) || 0)
               }
               placeholder="0"
               className="mt-1 h-11 text-right text-base"
@@ -79,23 +80,29 @@ export const MabCalculus = () => {
               inputMode="decimal"
               step="0.01"
               min={0}
-              value={labor || ""}
-              onChange={(e) => setLabor(Number.parseFloat(e.target.value) || 0)}
+              value={store.state.labor || ""}
+              onChange={(e) =>
+                store.actions.setLabor(Number.parseFloat(e.target.value) || 0)
+              }
               placeholder="0"
               className="mt-1 h-11 text-right text-base"
             />
           </div>
-        </div> */}
+        </div>
       </div>
 
-      {/* <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-background/90 p-4 backdrop-blur-sm">
+      <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-background/90 p-4 backdrop-blur-sm">
         <div className="mx-auto w-full max-w-md">
-          <Button size="lg" className="w-full" onClick={handleShare}>
+          <Button
+            size="lg"
+            className="w-full"
+            onClick={store.actions.handleShare}
+          >
             <Share2 className="mr-2 h-5 w-5" />
             Enviar presupuesto
           </Button>
         </div>
-      </div> */}
+      </div>
     </main>
   );
 };

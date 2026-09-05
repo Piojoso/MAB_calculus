@@ -18,35 +18,29 @@ export const MabTotals = (props: Props) => {
           rightLabel={formatMoney(props.partsSubtotal)}
         />
 
-        {/* <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground"></span>
-          <span className="font-medium text-foreground"></span>
-        </div> */}
+        <CustomSummaryLine
+          leftLabel="Pago por adelantado"
+          rightLabel={`- ${formatMoney(props.advance)}`}
+        />
+        {/* − {formatMoney(props.advance)} */}
 
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Pago por adelantado</span>
-          <span className="font-medium text-foreground">
-            − {formatMoney(props.advance)}
-          </span>
-        </div>
+        <hr className="mb-2 border-dashed" />
 
-        <div className="border-t border-dashed border-border pt-2">
-          <div className="flex justify-between text-sm">
-            <span className="font-medium text-foreground">Saldo</span>
-            <span className="font-semibold text-foreground">
-              {formatMoney(props.balance)}
-            </span>
-          </div>
-        </div>
+        <CustomSummaryLine
+          leftLabel="Saldo"
+          leftLabelClass="font-medium text-foreground"
+          rightLabel={formatMoney(props.balance)}
+          rightLabelClass="font-semibold text-foreground"
+        />
       </div>
 
-      <div className="mt-2 space-y-2 border-t border-border pt-4">
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Mano de obra</span>
-          <span className="font-medium text-foreground">
-            + {formatMoney(props.labor)}
-          </span>
-        </div>
+      <hr className="mt-2 mb-4 " />
+
+      <div className="space-y-2">
+        <CustomSummaryLine
+          leftLabel="Mano de obra"
+          rightLabel={`+ ${formatMoney(props.labor)}`}
+        />
 
         <div className="border-t-2 border-primary pt-3">
           <div className="flex justify-between">
