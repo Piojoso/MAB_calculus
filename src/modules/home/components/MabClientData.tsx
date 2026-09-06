@@ -27,7 +27,7 @@ interface Props {
   handleAddClientData: (clientData: DraftClientData) => void;
 }
 
-export const ClientData = (props: Props) => {
+export const MabClientData = (props: Props) => {
   const [localName, setLocalName] = useState(props.name);
   const [localAddress, setLocalAddress] = useState(props.address);
   const [localPhone, setLocalPhone] = useState(props.phone);

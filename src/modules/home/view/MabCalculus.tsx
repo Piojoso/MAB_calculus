@@ -1,12 +1,12 @@
 import { useMabCalculus } from "../hooks/useMabCalculus";
-import { MabCalculusHeader } from "../components/MabCalculusHeader";
-import { RepairParts } from "../components/RepairParts";
-import { ClientData } from "../components/ClientData";
+import { MabCalculusHeader } from "../components/MabHeader";
+import { MabRepairParts } from "../components/MabRepairParts";
+import { MabClientData } from "../components/MabClientData";
 import { MabTotals } from "../components/MabTotals";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+
 import { Button } from "@/components/ui/button";
 import { Share2 } from "lucide-react";
+import { MabInputs } from "../components/MabInputs";
 
 export const MabCalculus = () => {
   const { repairParts, clientData, ...store } = useMabCalculus();
@@ -38,11 +38,11 @@ export const MabCalculus = () => {
 
           <hr className="my-4" />
           {clientData.state.name}
-          <ClientData {...clientData.state} {...clientData.actions} />
+          <MabClientData {...clientData.state} {...clientData.actions} />
 
           <hr className="my-4" />
 
-          <RepairParts {...repairParts.state} {...repairParts.actions} />
+          <MabRepairParts {...repairParts.state} {...repairParts.actions} />
 
           <hr className="my-4" />
 
@@ -50,45 +50,7 @@ export const MabCalculus = () => {
         </div>
 
         {/* Inputs for labor and advance live outside the receipt so they don't show on the screenshot. */}
-        <div className="mt-5 space-y-4 rounded-xl bg-card p-4 shadow-sm">
-          <div>
-            <Label htmlFor="advance" className="text-sm text-muted-foreground">
-              Pago por adelantado
-            </Label>
-            <Input
-              id="advance"
-              type="number"
-              inputMode="decimal"
-              step="0.01"
-              min={0}
-              value={store.state.advance || ""}
-              onChange={(e) =>
-                store.actions.setAdvance(Number.parseFloat(e.target.value) || 0)
-              }
-              placeholder="0"
-              className="mt-1 h-11 text-right text-base"
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="labor" className="text-sm text-muted-foreground">
-              Mano de obra
-            </Label>
-            <Input
-              id="labor"
-              type="number"
-              inputMode="decimal"
-              step="0.01"
-              min={0}
-              value={store.state.labor || ""}
-              onChange={(e) =>
-                store.actions.setLabor(Number.parseFloat(e.target.value) || 0)
-              }
-              placeholder="0"
-              className="mt-1 h-11 text-right text-base"
-            />
-          </div>
-        </div>
+        <MabInputs {...store.state} {...store.actions} />
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-background/90 p-4 backdrop-blur-sm">

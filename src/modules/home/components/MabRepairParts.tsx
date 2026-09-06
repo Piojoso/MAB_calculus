@@ -32,7 +32,7 @@ interface Props {
   handleAddNewPart: () => void;
 }
 
-export const RepairParts = (props: Props) => {
+export const MabRepairParts = (props: Props) => {
   return (
     <>
       <section className="space-y-3">
