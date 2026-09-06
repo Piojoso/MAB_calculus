@@ -1,13 +1,19 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { emptyRow } from "../helpers/helpers";
 
-// import { toPng } from "html-to-image";
+import { toPng } from "html-to-image";
 
 import { clearDraft, getDraft, getParts, saveDraft } from "@/lib/db";
 import { useAlert } from "@/providers/AlertDialogProvider";
 import { CleanDialog } from "../components/CleanDialog";
 import { useRepairParts } from "./useRepairParts";
 import { useClientData } from "./useClientData";
+
+const filter = (node: HTMLElement) => {
+  const exclusionTags = ["BUTTON"];
+
+  return !exclusionTags.some((tagName) => node.tagName === tagName);
+};
 
 export const useMabCalculus = () => {
   const { closeDialog, openDialog } = useAlert();
@@ -111,31 +117,32 @@ export const useMabCalculus = () => {
   const handleShare = useCallback(async () => {
     if (!receiptRef.current) return;
 
-    // const dataUrl = await toPng(receiptRef.current, {
-    //   pixelRatio: 2,
-    //   backgroundColor: "#ffffff",
-    // });
+    const dataUrl = await toPng(receiptRef.current, {
+      pixelRatio: 2,
+      backgroundColor: "#ffffff",
+      filter: filter,
+    });
 
-    // const blob = await (await fetch(dataUrl)).blob();
-    // const file = new File([blob], "presupuesto.png", { type: "image/png" });
+    const blob = await (await fetch(dataUrl)).blob();
+    const file = new File([blob], "presupuesto.png", { type: "image/png" });
 
-    // try {
-    //   if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    //     await navigator.share({
-    //       files: [file],
-    //       title: "Presupuesto",
-    //       text: "Te paso el presupuesto de la reparación",
-    //     });
-    //     return;
-    //   }
-    // } catch {
-    //   // Share failed or cancelled; fall back to download.
-    // }
+    try {
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: "Presupuesto",
+          text: "Te paso el presupuesto de la reparación",
+        });
+        return;
+      }
+    } catch {
+      // Share failed or cancelled; fall back to download.
+    }
 
-    // const link = document.createElement("a");
-    // link.href = dataUrl;
-    // link.download = "presupuesto.png";
-    // link.click();
+    const link = document.createElement("a");
+    link.href = dataUrl;
+    link.download = "presupuesto.png";
+    link.click();
   }, []);
 
   const handleOpenCleanDialog = useCallback(() => {
