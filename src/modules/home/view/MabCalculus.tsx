@@ -20,7 +20,7 @@ export const MabCalculus = () => {
   }
 
   return (
-    <main className="min-h-screen bg-background pb-32">
+    <main className="min-h-screen bg-background pt-6 pb-32">
       <div className="mx-auto w-full max-w-md">
         <div ref={store.state.receiptRef} className="space-y-4 py-4 px-4">
           <div className="text-center">
