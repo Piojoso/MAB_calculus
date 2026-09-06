@@ -7,6 +7,9 @@ interface Props {
   balance: number;
   labor: number;
   total: number;
+
+  focusLaborInput: () => void;
+  focusAdvanceInput: () => void;
 }
 
 export const MabTotals = (props: Props) => {
@@ -18,10 +21,12 @@ export const MabTotals = (props: Props) => {
           rightLabel={formatMoney(props.partsSubtotal)}
         />
 
-        <CustomSummaryLine
-          leftLabel="Pago por adelantado"
-          rightLabel={`- ${formatMoney(props.advance)}`}
-        />
+        <div onClick={props.focusAdvanceInput}>
+          <CustomSummaryLine
+            leftLabel="Pago por adelantado"
+            rightLabel={`- ${formatMoney(props.advance)}`}
+          />
+        </div>
         {/* − {formatMoney(props.advance)} */}
 
         <hr className="mb-2 border-dashed" />
@@ -37,10 +42,12 @@ export const MabTotals = (props: Props) => {
       <hr className="mt-2 mb-4 " />
 
       <div className="space-y-2">
-        <CustomSummaryLine
-          leftLabel="Mano de obra"
-          rightLabel={`+ ${formatMoney(props.labor)}`}
-        />
+        <div onClick={props.focusLaborInput}>
+          <CustomSummaryLine
+            leftLabel="Mano de obra"
+            rightLabel={`+ ${formatMoney(props.labor)}`}
+          />
+        </div>
 
         <div className="border-t-2 border-primary pt-3">
           <div className="flex justify-between">

@@ -4,6 +4,8 @@ import { Input } from "@/components/ui/input";
 interface Props {
   advance: number;
   labor: number;
+  advanceInputRef: React.RefObject<HTMLInputElement | null>;
+  laborInputRef: React.RefObject<HTMLInputElement | null>;
 
   setAdvance: React.Dispatch<React.SetStateAction<number>>;
   setLabor: React.Dispatch<React.SetStateAction<number>>;
@@ -18,6 +20,7 @@ export const MabInputs = (props: Props) => {
             Pago por adelantado
           </Label>
           <Input
+            ref={props.advanceInputRef}
             id="advance"
             type="number"
             inputMode="decimal"
@@ -37,6 +40,7 @@ export const MabInputs = (props: Props) => {
             Mano de obra
           </Label>
           <Input
+            ref={props.laborInputRef}
             id="labor"
             type="number"
             inputMode="decimal"

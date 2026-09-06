@@ -28,6 +28,8 @@ export const useMabCalculus = () => {
   const receiptRef = useRef<HTMLDivElement>(null);
   const [isTakingPicture, setIsTakingPicture] = useState(false);
   const initialLoadRef = useRef(false);
+  const advanceInputRef = useRef<HTMLInputElement>(null);
+  const laborInputRef = useRef<HTMLInputElement>(null);
 
   // Load persisted catalog and draft on mount.
   useEffect(() => {
@@ -161,6 +163,18 @@ export const useMabCalculus = () => {
     openDialog(<CleanDialog onConfirm={handleClean} onCancel={closeDialog} />);
   }, []);
 
+  const focusLaborInput = () => {
+    if (!laborInputRef.current) return;
+
+    laborInputRef.current.focus();
+  };
+
+  const focusAdvanceInput = () => {
+    if (!advanceInputRef.current) return;
+
+    advanceInputRef.current.focus();
+  };
+
   return useMemo(
     () => ({
       repairParts,
@@ -175,6 +189,8 @@ export const useMabCalculus = () => {
         labor,
         total,
         isTakingPicture,
+        advanceInputRef,
+        laborInputRef,
       },
 
       actions: {
@@ -184,6 +200,8 @@ export const useMabCalculus = () => {
         handleShare,
 
         handleOpenCleanDialog,
+        focusLaborInput,
+        focusAdvanceInput,
       },
     }),
     [
