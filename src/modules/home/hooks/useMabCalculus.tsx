@@ -23,14 +23,17 @@ export const useMabCalculus = () => {
 
   const [labor, setLabor] = useState(0);
   const [advance, setAdvance] = useState(0);
+  const [warranty, setWarranty] = useState(3);
   const [loading, setLoading] = useState(true);
 
   const receiptRef = useRef<HTMLDivElement>(null);
   const [isTakingPicture, setIsTakingPicture] = useState(false);
   const initialLoadRef = useRef(false);
+
   const advanceInputRef = useRef<HTMLInputElement>(null);
   const laborInputRef = useRef<HTMLInputElement>(null);
 
+  const warrantyInputRef = useRef<HTMLInputElement>(null);
   // Load persisted catalog and draft on mount.
   useEffect(() => {
     let cancelled = false;
@@ -163,16 +166,26 @@ export const useMabCalculus = () => {
     openDialog(<CleanDialog onConfirm={handleClean} onCancel={closeDialog} />);
   }, []);
 
-  const focusLaborInput = () => {
-    if (!laborInputRef.current) return;
+  const focusInputReference = (input: "labor" | "advance" | "warranty") => {
+    switch (input) {
+      case "labor":
+        if (!laborInputRef.current) return;
+        laborInputRef.current.focus();
+        break;
 
-    laborInputRef.current.focus();
-  };
+      case "advance":
+        if (!advanceInputRef.current) return;
+        advanceInputRef.current.focus();
+        break;
 
-  const focusAdvanceInput = () => {
-    if (!advanceInputRef.current) return;
+      case "warranty":
+        if (!warrantyInputRef.current) return;
+        warrantyInputRef.current.focus();
+        break;
 
-    advanceInputRef.current.focus();
+      default:
+        break;
+    }
   };
 
   return useMemo(
@@ -191,6 +204,8 @@ export const useMabCalculus = () => {
         isTakingPicture,
         advanceInputRef,
         laborInputRef,
+        warranty,
+        warrantyInputRef,
       },
 
       actions: {
@@ -198,10 +213,10 @@ export const useMabCalculus = () => {
         setAdvance,
         setLabor,
         handleShare,
+        setWarranty,
 
         handleOpenCleanDialog,
-        focusLaborInput,
-        focusAdvanceInput,
+        focusInputReference,
       },
     }),
     [

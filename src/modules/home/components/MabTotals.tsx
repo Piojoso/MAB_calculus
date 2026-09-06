@@ -7,9 +7,9 @@ interface Props {
   balance: number;
   labor: number;
   total: number;
+  warranty: number;
 
-  focusLaborInput: () => void;
-  focusAdvanceInput: () => void;
+  focusInputReference: (input: "labor" | "advance" | "warranty") => void;
 }
 
 export const MabTotals = (props: Props) => {
@@ -21,7 +21,7 @@ export const MabTotals = (props: Props) => {
           rightLabel={formatMoney(props.partsSubtotal)}
         />
 
-        <div onClick={props.focusAdvanceInput}>
+        <div onClick={() => props.focusInputReference("advance")}>
           <CustomSummaryLine
             leftLabel="Pago por adelantado"
             rightLabel={`- ${formatMoney(props.advance)}`}
@@ -42,7 +42,7 @@ export const MabTotals = (props: Props) => {
       <hr className="mt-2 mb-4 " />
 
       <div className="space-y-2">
-        <div onClick={props.focusLaborInput}>
+        <div onClick={() => props.focusInputReference("labor")}>
           <CustomSummaryLine
             leftLabel="Mano de obra"
             rightLabel={`+ ${formatMoney(props.labor)}`}
@@ -59,6 +59,15 @@ export const MabTotals = (props: Props) => {
             </span>
           </div>
         </div>
+      </div>
+
+      <hr className="my-4" />
+
+      <div onClick={() => props.focusInputReference("warranty")}>
+        <CustomSummaryLine
+          leftLabel="Garantia mano de obra (sin repuestos):"
+          rightLabel={`${props.warranty} Meses`}
+        />
       </div>
     </>
   );
