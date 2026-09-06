@@ -40,7 +40,7 @@ export const MabRepairParts = (props: Props) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const getPartPrice = useCallback(
-    (row: Row) => (row.partId ? formatMoney(row.price) : ""),
+    (row: Row) => formatMoney(row.price),
     [props.rows],
   );
 
@@ -56,6 +56,16 @@ export const MabRepairParts = (props: Props) => {
     [props.rows],
   );
 
+  const handleToggleIsEditing = () => {
+    const lastPart = props.rows.at(props.rows.length - 1);
+
+    if (lastPart?.partId === null) {
+      props.removeRow(lastPart.id);
+    }
+
+    setIsEditing((prev) => !prev);
+  };
+
   return (
     <>
       <section className="space-y-3">
@@ -64,7 +74,7 @@ export const MabRepairParts = (props: Props) => {
             Repuestos
           </h3>
           <Button
-            onClick={() => setIsEditing((prev) => !prev)}
+            onClick={handleToggleIsEditing}
             variant="ghost"
             size="sm"
             className="h-8 text-xs text-muted-foreground hover:text-destructive"
@@ -137,6 +147,7 @@ export const MabRepairParts = (props: Props) => {
             <Button
               variant="secondary"
               size="sm"
+              disabled={props.rows[props.rows.length - 1].partId === null}
               onClick={props.addRow}
               className="w-full"
             >
