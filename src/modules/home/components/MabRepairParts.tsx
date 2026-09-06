@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -25,6 +25,7 @@ interface Props {
   addDialogOpen: boolean;
   newPartName: string;
   newPartPrice: string;
+  isEditing: boolean;
 
   handlePartSelect: (rowId: string, value: string) => void;
   updateRow: (id: string, patch: Partial<Row>) => void;
@@ -34,11 +35,10 @@ interface Props {
   setNewPartName: React.Dispatch<React.SetStateAction<string>>;
   setNewPartPrice: React.Dispatch<React.SetStateAction<string>>;
   handleAddNewPart: () => void;
+  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const MabRepairParts = (props: Props) => {
-  const [isEditing, setIsEditing] = useState(false);
-
   const getPartPrice = useCallback(
     (row: Row) => formatMoney(row.price),
     [props.rows],
@@ -63,7 +63,7 @@ export const MabRepairParts = (props: Props) => {
       props.removeRow(lastPart.id);
     }
 
-    setIsEditing((prev) => !prev);
+    props.setIsEditing((prev) => !prev);
   };
 
   return (
@@ -84,7 +84,7 @@ export const MabRepairParts = (props: Props) => {
           </Button>
         </div>
 
-        {!isEditing &&
+        {!props.isEditing &&
           props.rows.map((row) => (
             <div key={row.id}>
               <CustomSummaryLine
@@ -94,7 +94,7 @@ export const MabRepairParts = (props: Props) => {
             </div>
           ))}
 
-        {isEditing && (
+        {props.isEditing && (
           <div className="space-y-2">
             {props.rows.map((row) => (
               <div

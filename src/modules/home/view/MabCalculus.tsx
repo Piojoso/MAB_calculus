@@ -20,31 +20,35 @@ export const MabCalculus = () => {
   }
 
   return (
-    <main className="min-h-screen bg-background py-6 pb-32">
+    <main className="min-h-screen bg-background pb-32">
       <div className="mx-auto w-full max-w-md">
-        <div className="text-center">
-          <h1 className="text-lg font-semibold text-foreground">M A B</h1>
-          <p className="text-xs text-muted-foreground">
-            Calculadora de reparación
-          </p>
-        </div>
+        <div ref={store.state.receiptRef} className="space-y-4 py-4 px-4">
+          <div className="text-center">
+            <h1 className="text-lg font-semibold text-foreground">M A B</h1>
+            <p className="text-xs text-muted-foreground">
+              {store.state.isTakingPicture
+                ? "Reparación de lavarropas"
+                : "Calculadora costos de reparación"}
+            </p>
+          </div>
 
-        <div ref={store.state.receiptRef} className="py-4 px-4">
-          <div className="rounded-2xl bg-card p-5 shadow-lg">
-            {/* Header */}
-            <MabCalculusHeader {...store.actions} />
+          <div className="">
+            <div className="rounded-2xl bg-card p-5 shadow-lg">
+              {/* Header */}
+              <MabCalculusHeader {...store.actions} />
 
-            <hr className="my-4" />
-            {clientData.state.name}
-            <MabClientData {...clientData.state} {...clientData.actions} />
+              <hr className="my-4" />
+              {clientData.state.name}
+              <MabClientData {...clientData.state} {...clientData.actions} />
 
-            <hr className="my-4" />
+              <hr className="my-4" />
 
-            <MabRepairParts {...repairParts.state} {...repairParts.actions} />
+              <MabRepairParts {...repairParts.state} {...repairParts.actions} />
 
-            <hr className="my-4" />
+              <hr className="my-4" />
 
-            <MabTotals {...store.state} {...store.actions} />
+              <MabTotals {...store.state} {...store.actions} />
+            </div>
           </div>
         </div>
 

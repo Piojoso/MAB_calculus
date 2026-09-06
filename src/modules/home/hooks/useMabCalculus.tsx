@@ -26,6 +26,7 @@ export const useMabCalculus = () => {
   const [loading, setLoading] = useState(true);
 
   const receiptRef = useRef<HTMLDivElement>(null);
+  const [isTakingPicture, setIsTakingPicture] = useState(false);
   const initialLoadRef = useRef(false);
 
   // Load persisted catalog and draft on mount.
@@ -114,14 +115,25 @@ export const useMabCalculus = () => {
     closeDialog();
   }, [clientData, repairParts, closeDialog]);
 
+  const prepareForPicture = () => {
+    closeDialog();
+    clientData.actions.setIsEditing(false);
+    repairParts.actions.setAddDialogOpen(false);
+    repairParts.actions.setIsEditing(false);
+  };
+
   const handleShare = useCallback(async () => {
     if (!receiptRef.current) return;
+
+    setIsTakingPicture(true);
+    prepareForPicture();
 
     const dataUrl = await toPng(receiptRef.current, {
       pixelRatio: 2,
       backgroundColor: "#eef2ff",
       filter: filter,
     });
+    setIsTakingPicture(false);
 
     const blob = await (await fetch(dataUrl)).blob();
     const file = new File([blob], "presupuesto.png", { type: "image/png" });
@@ -162,6 +174,7 @@ export const useMabCalculus = () => {
         balance,
         labor,
         total,
+        isTakingPicture,
       },
 
       actions: {

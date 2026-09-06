@@ -16,6 +16,8 @@ export const useRepairParts = () => {
   const [newPartName, setNewPartName] = useState("");
   const [newPartPrice, setNewPartPrice] = useState("");
 
+  const [isEditing, setIsEditing] = useState(false);
+
   function handlePartSelect(rowId: string, value: string) {
     if (value === ADD_NEW) {
       setPendingRowId(rowId);
@@ -84,6 +86,7 @@ export const useRepairParts = () => {
         newPartName,
         newPartPrice,
         pendingRowId,
+        isEditing,
       },
       actions: {
         setParts,
@@ -92,6 +95,7 @@ export const useRepairParts = () => {
         setNewPartName,
         setNewPartPrice,
         setPendingRowId,
+        setIsEditing,
 
         handlePartSelect,
         updateRow,
