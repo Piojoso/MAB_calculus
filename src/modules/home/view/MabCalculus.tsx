@@ -35,7 +35,7 @@ export const MabCalculus = () => {
           <div className="">
             <div className="rounded-2xl bg-card p-5 shadow-lg">
               {/* Header */}
-              <MabCalculusHeader {...store.actions} />
+              <MabCalculusHeader {...store.state} {...store.actions} />
 
               <hr className="my-4" />
 
