@@ -46,8 +46,6 @@ export const MabRepairParts = (props: Props) => {
 
   const getPartName = useCallback(
     (row: Row) => {
-      console.log(props.rows.length);
-
       if (!row.partId && props.rows.length === 1)
         return "Sin repuestos registrados.";
 

@@ -38,7 +38,7 @@ export const MabCalculus = () => {
               <MabCalculusHeader {...store.actions} />
 
               <hr className="my-4" />
-              {clientData.state.name}
+
               <MabClientData {...clientData.state} {...clientData.actions} />
 
               <hr className="my-4" />
