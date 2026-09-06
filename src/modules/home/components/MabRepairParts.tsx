@@ -1,3 +1,5 @@
+import { useCallback, useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -8,9 +10,11 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus, X } from "lucide-react";
+import { Pencil, Plus, X } from "lucide-react";
+import { CustomSummaryLine } from "@/components/custom/CustomSummaryLine";
 
 import type { RepairPart, Row } from "../interfaces";
+import { formatMoney } from "../helpers/helpers";
 
 const ADD_NEW = "__add_new__";
 const EMPTY_PART = "__empty__";
@@ -33,6 +37,25 @@ interface Props {
 }
 
 export const MabRepairParts = (props: Props) => {
+  const [isEditing, setIsEditing] = useState(false);
+
+  const getPartPrice = useCallback(
+    (row: Row) => (row.partId ? formatMoney(row.price) : ""),
+    [props.rows],
+  );
+
+  const getPartName = useCallback(
+    (row: Row) => {
+      console.log(props.rows.length);
+
+      if (!row.partId && props.rows.length === 1)
+        return "Sin repuestos registrados.";
+
+      return props.parts.find((part) => row.partId === part.id)?.name ?? "";
+    },
+    [props.rows],
+  );
+
   return (
     <>
       <section className="space-y-3">
@@ -40,65 +63,88 @@ export const MabRepairParts = (props: Props) => {
           <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
             Repuestos
           </h3>
+          <Button
+            onClick={() => setIsEditing((prev) => !prev)}
+            variant="ghost"
+            size="sm"
+            className="h-8 text-xs text-muted-foreground hover:text-destructive"
+          >
+            <Pencil className="mr-1 h-3 w-3.5" />
+            Editar
+          </Button>
         </div>
 
-        <div className="space-y-2">
-          {props.rows.map((row) => (
-            <div
-              key={row.id}
-              className="grid grid-cols-[1fr_7rem_auto] items-center gap-2"
-            >
-              <select
-                value={row.partId ?? EMPTY_PART}
-                onChange={(e) => props.handlePartSelect(row.id, e.target.value)}
-                className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                <option value={EMPTY_PART}>Seleccionar repuesto</option>
-                {props.parts.map((part) => (
-                  <option key={part.id} value={part.id}>
-                    {part.name}
-                  </option>
-                ))}
-                <option value={ADD_NEW}>+ Agregar nuevo repuesto</option>
-              </select>
-
-              <Input
-                type="number"
-                inputMode="decimal"
-                step="0.01"
-                min={0}
-                value={row.price || ""}
-                onChange={(e) =>
-                  props.updateRow(row.id, {
-                    price: Number.parseFloat(e.target.value) || 0,
-                  })
-                }
-                placeholder="Precio"
-                className="h-10 px-2 text-right text-sm"
+        {!isEditing &&
+          props.rows.map((row) => (
+            <div key={row.id}>
+              <CustomSummaryLine
+                rightLabel={getPartPrice(row)}
+                leftLabel={getPartName(row)}
               />
-
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-10 w-10 text-muted-foreground hover:text-destructive"
-                onClick={() => props.removeRow(row.id)}
-                aria-label="Eliminar repuesto"
-              >
-                <X className="h-4 w-4" />
-              </Button>
             </div>
           ))}
-        </div>
 
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={props.addRow}
-          className="w-full"
-        >
-          <Plus className="mr-1 h-4 w-4" />
-          Agregar repuesto
-        </Button>
+        {isEditing && (
+          <div className="space-y-2">
+            {props.rows.map((row) => (
+              <div
+                key={row.id}
+                className="grid grid-cols-[1fr_7rem_auto] items-center gap-2"
+              >
+                <select
+                  value={row.partId ?? EMPTY_PART}
+                  onChange={(e) =>
+                    props.handlePartSelect(row.id, e.target.value)
+                  }
+                  className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  <option value={EMPTY_PART}>Seleccionar repuesto</option>
+                  {props.parts.map((part) => (
+                    <option key={part.id} value={part.id}>
+                      {part.name}
+                    </option>
+                  ))}
+                  <option value={ADD_NEW}>+ Agregar nuevo repuesto</option>
+                </select>
+
+                <Input
+                  type="number"
+                  inputMode="decimal"
+                  step="0.01"
+                  min={0}
+                  value={row.price || ""}
+                  onChange={(e) =>
+                    props.updateRow(row.id, {
+                      price: Number.parseFloat(e.target.value) || 0,
+                    })
+                  }
+                  placeholder="Precio"
+                  className="h-10 px-2 text-right text-sm"
+                />
+
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-10 w-10 text-muted-foreground hover:text-destructive"
+                  onClick={() => props.removeRow(row.id)}
+                  aria-label="Eliminar repuesto"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={props.addRow}
+              className="w-full"
+            >
+              <Plus className="mr-1 h-4 w-4" />
+              Agregar repuesto
+            </Button>
+          </div>
+        )}
       </section>
 
       <Dialog open={props.addDialogOpen} onOpenChange={props.setAddDialogOpen}>
