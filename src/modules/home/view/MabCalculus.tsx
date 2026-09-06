@@ -20,33 +20,32 @@ export const MabCalculus = () => {
   }
 
   return (
-    <main className="min-h-screen bg-background px-4 py-6 pb-32">
+    <main className="min-h-screen bg-background py-6 pb-32">
       <div className="mx-auto w-full max-w-md">
-        <div className="mb-4 text-center">
+        <div className="text-center">
           <h1 className="text-lg font-semibold text-foreground">M A B</h1>
           <p className="text-xs text-muted-foreground">
             Calculadora de reparación
           </p>
         </div>
 
-        <div
-          ref={store.state.receiptRef}
-          className="rounded-2xl bg-card p-5 shadow-lg"
-        >
-          {/* Header */}
-          <MabCalculusHeader {...store.actions} />
+        <div ref={store.state.receiptRef} className="py-4 px-4">
+          <div className="rounded-2xl bg-card p-5 shadow-lg">
+            {/* Header */}
+            <MabCalculusHeader {...store.actions} />
 
-          <hr className="my-4" />
-          {clientData.state.name}
-          <MabClientData {...clientData.state} {...clientData.actions} />
+            <hr className="my-4" />
+            {clientData.state.name}
+            <MabClientData {...clientData.state} {...clientData.actions} />
 
-          <hr className="my-4" />
+            <hr className="my-4" />
 
-          <MabRepairParts {...repairParts.state} {...repairParts.actions} />
+            <MabRepairParts {...repairParts.state} {...repairParts.actions} />
 
-          <hr className="my-4" />
+            <hr className="my-4" />
 
-          <MabTotals {...store.state} {...store.actions} />
+            <MabTotals {...store.state} {...store.actions} />
+          </div>
         </div>
 
         {/* Inputs for labor and advance live outside the receipt so they don't show on the screenshot. */}

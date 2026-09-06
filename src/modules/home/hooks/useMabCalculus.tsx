@@ -119,7 +119,7 @@ export const useMabCalculus = () => {
 
     const dataUrl = await toPng(receiptRef.current, {
       pixelRatio: 2,
-      backgroundColor: "#ffffff",
+      backgroundColor: "#eef2ff",
       filter: filter,
     });
 

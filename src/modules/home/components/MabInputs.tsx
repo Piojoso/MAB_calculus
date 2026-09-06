@@ -12,7 +12,7 @@ interface Props {
 export const MabInputs = (props: Props) => {
   return (
     <>
-      <div className="mt-5 space-y-4 rounded-xl bg-card p-4 shadow-sm">
+      <div className="mt-1 mx-4 space-y-4 rounded-xl bg-card p-4 shadow-sm">
         <div>
           <Label htmlFor="advance" className="text-sm text-muted-foreground">
             Pago por adelantado
