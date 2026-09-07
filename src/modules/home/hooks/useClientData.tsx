@@ -46,6 +46,10 @@ export const useClientData = () => {
     setIsEditing(false);
   }, []);
 
+  const getClientData = useCallback((): DraftClientData => {
+    return { name, address, phone };
+  }, []);
+
   return useMemo(
     () => ({
       state: { name, address, phone, isEditing },
@@ -58,6 +62,7 @@ export const useClientData = () => {
         setClientData,
         handleAddClientData,
         resetClientData,
+        getClientData,
       },
     }),
     [
