@@ -7,6 +7,7 @@ import { MabTotals } from "../components/MabTotals";
 import { Button } from "@/components/ui/button";
 import { Share2 } from "lucide-react";
 import { MabInputs } from "../components/MabInputs";
+import { HistoryDrawer } from "../components/HistoryDrawer";
 
 export const MabCalculus = () => {
   const { repairParts, clientData, ...store } = useMabCalculus();
@@ -23,13 +24,24 @@ export const MabCalculus = () => {
     <main className="min-h-screen bg-background pt-6 pb-32">
       <div className="mx-auto w-full max-w-md">
         <div ref={store.state.receiptRef} className="space-y-4 py-4 px-4">
-          <div className="text-center">
-            <h1 className="text-lg font-semibold text-foreground">M A B</h1>
-            <p className="text-xs text-muted-foreground">
-              {store.state.isTakingPicture
-                ? "Reparación de lavarropas"
-                : "Calculadora costos de reparación"}
-            </p>
+          <div className="relative">
+            {/* <Button
+              variant="ghost"
+              size="lg"
+              className="absolute h-full w-12 text-muted-foreground"
+            >
+              <History />
+            </Button> */}
+            <HistoryDrawer />
+
+            <div className="text-center">
+              <h1 className="text-lg font-semibold text-foreground">M A B</h1>
+              <p className="text-xs text-muted-foreground">
+                {store.state.isTakingPicture
+                  ? "Reparación de lavarropas"
+                  : "Calculadora costos de reparación"}
+              </p>
+            </div>
           </div>
 
           <div className="">
