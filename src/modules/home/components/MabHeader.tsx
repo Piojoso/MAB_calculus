@@ -1,16 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 
-import { todayLabel } from "../helpers/helpers";
-
 interface Props {
   isTakingPicture: boolean;
+  quoteDate: string;
 
   handleOpenCleanDialog: () => void;
 }
 
 export const MabCalculusHeader = ({
   isTakingPicture,
+  quoteDate,
+
   handleOpenCleanDialog,
 }: Props) => {
   return (
@@ -20,7 +21,7 @@ export const MabCalculusHeader = ({
           Presupuesto de reparación
         </h2>
 
-        <p className="text-xs text-muted-foreground">{todayLabel()}</p>
+        <p className="text-xs text-muted-foreground">{quoteDate}</p>
       </div>
 
       {!isTakingPicture && (

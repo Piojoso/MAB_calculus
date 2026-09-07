@@ -1,9 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { emptyRow } from "../helpers/helpers";
+import { emptyRow, todayLabel } from "../helpers/helpers";
 
 import { toPng } from "html-to-image";
 
-import { clearDraft, getDraft, getParts, saveDraft } from "@/lib/db";
+import {
+  clearDraft,
+  getDraft,
+  getParts,
+  getRepairQuoteById,
+  saveDraft,
+  saveRepairQuote,
+} from "@/lib/db";
 import { useAlert } from "@/providers/AlertDialogProvider";
 import { CleanDialog } from "../components/CleanDialog";
 import { useRepairParts } from "./useRepairParts";
@@ -21,6 +28,11 @@ export const useMabCalculus = () => {
   const repairParts = useRepairParts();
   const clientData = useClientData();
 
+  const [quoteStatus, setQuoteStatus] = useState<"new" | "saved" | "shared">(
+    "new",
+  );
+
+  const [quoteDate, setQuoteDate] = useState(todayLabel());
   const [labor, setLabor] = useState(0);
   const [advance, setAdvance] = useState(0);
   const [warranty, setWarranty] = useState(3);
@@ -32,8 +44,8 @@ export const useMabCalculus = () => {
 
   const advanceInputRef = useRef<HTMLInputElement>(null);
   const laborInputRef = useRef<HTMLInputElement>(null);
-
   const warrantyInputRef = useRef<HTMLInputElement>(null);
+
   // Load persisted catalog and draft on mount.
   useEffect(() => {
     let cancelled = false;
@@ -188,6 +200,36 @@ export const useMabCalculus = () => {
     }
   };
 
+  const handleSelectOldRepairQuote = async (id: number) => {
+    const repairQuote = await getRepairQuoteById(id);
+    if (!repairQuote) return;
+
+    setQuoteDate(repairQuote.date);
+    clientData.actions.setClientData(repairQuote.clientData);
+    repairParts.actions.setParts(repairQuote.repairParts);
+    setAdvance(repairQuote.advance);
+    setLabor(repairQuote.labor);
+    setWarranty(repairQuote.warranty);
+
+    // setIsEditingDisabled(repairQuote.shared);
+  };
+
+  const handleSaveRepairQuote = async () => {
+    const repairQuote = await saveRepairQuote(
+      quoteDate,
+      clientData.actions.getClientData(),
+      repairParts.state.parts,
+      advance,
+      labor,
+      warranty,
+      false,
+    );
+
+    if (repairQuote.id) {
+      setQuoteStatus("saved");
+    }
+  };
+
   return useMemo(
     () => ({
       repairParts,
@@ -206,6 +248,8 @@ export const useMabCalculus = () => {
         laborInputRef,
         warranty,
         warrantyInputRef,
+        quoteDate,
+        quoteStatus,
       },
 
       actions: {
@@ -217,6 +261,8 @@ export const useMabCalculus = () => {
 
         handleOpenCleanDialog,
         focusInputReference,
+        handleSelectOldRepairQuote,
+        handleSaveRepairQuote,
       },
     }),
     [
