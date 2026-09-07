@@ -1,4 +1,4 @@
-import * as React from "react";
+import { use, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,9 +14,18 @@ import {
 import { History } from "lucide-react";
 
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { getRepairQuotes } from "@/lib/db";
 
-export function HistoryDrawer() {
-  const [open, setOpen] = React.useState(false);
+interface Props {
+  handleSelectOldRepairQuote: (id: number) => Promise<void>;
+}
+
+const repairQuotesPromise = getRepairQuotes();
+
+export const HistoryDrawer = (props: Props) => {
+  const [open, setOpen] = useState(false);
+
+  const repairQuotes = use(repairQuotesPromise);
 
   return (
     <Drawer open={open} onOpenChange={setOpen} swipeDirection="left">
@@ -40,14 +49,20 @@ export function HistoryDrawer() {
         </DrawerHeader>
         <div className="flex-1 scroll-fade overflow-y-auto p-4">
           <ToggleGroup size="lg" variant="outline" orientation="vertical">
-            <ToggleGroupItem
-              value="light"
-              aria-label="Light"
-              className="flex size-16 flex-col items-center justify-center rounded-xl"
-            >
-              <span className="text-2xl leading-none font-light">Aa</span>
-              <span className="text-xs text-muted-foreground">Light</span>
-            </ToggleGroupItem>
+            {repairQuotes.map((quote) => (
+              <ToggleGroupItem
+                key={quote.id}
+                onClick={() => props.handleSelectOldRepairQuote(quote.id)}
+                value="light"
+                aria-label="Light"
+                className="flex size-16 flex-col items-center justify-center rounded-xl"
+              >
+                <span className="leading-none font-light">{quote.date}</span>
+                <span className="text-xs text-muted-foreground">
+                  {quote.clientData.name}
+                </span>
+              </ToggleGroupItem>
+            ))}
           </ToggleGroup>
         </div>
         <DrawerFooter>
@@ -56,4 +71,4 @@ export function HistoryDrawer() {
       </DrawerContent>
     </Drawer>
   );
-}
+};

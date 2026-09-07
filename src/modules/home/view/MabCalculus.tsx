@@ -5,7 +5,7 @@ import { MabClientData } from "../components/MabClientData";
 import { MabTotals } from "../components/MabTotals";
 
 import { Button } from "@/components/ui/button";
-import { Share2 } from "lucide-react";
+import { Save, Share2 } from "lucide-react";
 import { MabInputs } from "../components/MabInputs";
 import { HistoryDrawer } from "../components/HistoryDrawer";
 
@@ -32,7 +32,7 @@ export const MabCalculus = () => {
             >
               <History />
             </Button> */}
-            <HistoryDrawer />
+            <HistoryDrawer {...store.actions} />
 
             <div className="text-center">
               <h1 className="text-lg font-semibold text-foreground">M A B</h1>
@@ -70,14 +70,26 @@ export const MabCalculus = () => {
 
       <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-background/90 p-4 backdrop-blur-sm">
         <div className="mx-auto w-full max-w-md">
-          <Button
-            size="lg"
-            className="w-full"
-            onClick={store.actions.handleShare}
-          >
-            <Share2 className="mr-2 h-5 w-5" />
-            Enviar presupuesto
-          </Button>
+          {store.state.quoteStatus === "new" && (
+            <Button
+              size="lg"
+              className="w-full bg-green-600"
+              onClick={store.actions.handleSaveRepairQuote}
+            >
+              <Save className="mr-2 h-5 w-5" />
+              Guardar presupuesto
+            </Button>
+          )}
+          {store.state.quoteStatus === "saved" && (
+            <Button
+              size="lg"
+              className="w-full"
+              onClick={store.actions.handleShare}
+            >
+              <Share2 className="mr-2 h-5 w-5" />
+              Enviar presupuesto
+            </Button>
+          )}
         </div>
       </div>
     </main>
