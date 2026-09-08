@@ -66,7 +66,8 @@ export const MabCalculus = () => {
           {store.state.quoteStatus === "new" && (
             <Button
               size="lg"
-              className="w-full bg-green-600"
+              className="w-full border-indigo-500 text-indigo-500"
+              variant="outline"
               onClick={store.actions.handleSaveRepairQuote}
             >
               <Save className="mr-2 h-5 w-5" />
@@ -77,6 +78,7 @@ export const MabCalculus = () => {
             <Button
               size="lg"
               className="w-full"
+              variant="default"
               onClick={store.actions.handleShare}
             >
               <Share2 className="mr-2 h-5 w-5" />
