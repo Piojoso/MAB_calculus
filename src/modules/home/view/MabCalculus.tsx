@@ -25,17 +25,10 @@ export const MabCalculus = () => {
       <div className="mx-auto w-full max-w-md">
         <div ref={store.state.receiptRef} className="space-y-4 py-4 px-4">
           <div className="relative">
-            {/* <Button
-              variant="ghost"
-              size="lg"
-              className="absolute h-full w-12 text-muted-foreground"
-            >
-              <History />
-            </Button> */}
             <HistoryDrawer {...store.actions} />
 
             <div className="text-center">
-              <h1 className="text-lg font-semibold text-foreground">M A B</h1>
+              <h1 className="text-2xl font-semibold text-indigo-500 ">M A B</h1>
               <p className="text-xs text-muted-foreground">
                 {store.state.isTakingPicture
                   ? "Reparación de lavarropas"
