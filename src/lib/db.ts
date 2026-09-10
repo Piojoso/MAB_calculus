@@ -4,13 +4,15 @@ import type {
   DraftPartData,
   RepairPart,
   RepairQuote,
+  RepairQuoteStatus,
+  Row,
 } from "@/modules/home/interfaces";
 import type { Dexie, EntityTable } from "dexie";
 
 type RepairQuoteDb = Dexie & {
   parts: EntityTable<RepairPart, "id">;
   draft: EntityTable<DraftQuote, "id">;
-  historicRepairQuote: EntityTable<RepairQuote, "id">;
+  historic: EntityTable<RepairQuote, "id">;
 };
 
 let dbPromise: Promise<RepairQuoteDb> | null = null;
@@ -23,7 +25,7 @@ async function getDb(): Promise<RepairQuoteDb> {
       db.version(1).stores({
         parts: "++id, name",
         draft: "++id",
-        historicRepairQuote: "++id, date",
+        historic: "++id, date",
       });
       return db;
     })();
@@ -34,7 +36,7 @@ async function getDb(): Promise<RepairQuoteDb> {
 export async function getRepairQuotes(): Promise<RepairQuote[]> {
   const db = await getDb();
 
-  return await db.historicRepairQuote.orderBy("date").toArray();
+  return await db.historic.orderBy("date").reverse().toArray();
 }
 
 export async function getRepairQuoteById(
@@ -42,38 +44,41 @@ export async function getRepairQuoteById(
 ): Promise<RepairQuote | undefined> {
   const db = await getDb();
 
-  return await db.historicRepairQuote.get(id);
+  return await db.historic.get(id);
 }
 
 export async function saveRepairQuote(
   date: string,
   clientData: DraftClientData,
-  repairParts: RepairPart[],
+  repairRows: Row[],
   advance: number,
   labor: number,
   warranty: number,
   shared: boolean,
+  status: RepairQuoteStatus,
 ): Promise<RepairQuote> {
   const db = await getDb();
-  const id = await db.historicRepairQuote.add({
+  const id = await db.historic.add({
     date,
     clientData,
-    repairParts,
+    repairRows,
     advance,
     labor,
     warranty,
     shared,
+    status,
   });
 
   return {
     id: id as number,
     date,
     clientData,
-    repairParts,
+    repairRows,
     advance,
     labor,
     warranty,
     shared,
+    status,
   };
 }
 

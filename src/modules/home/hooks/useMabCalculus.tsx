@@ -15,6 +15,7 @@ import { useAlert } from "@/providers/AlertDialogProvider";
 import { CleanDialog } from "../components/CleanDialog";
 import { useRepairParts } from "./useRepairParts";
 import { useClientData } from "./useClientData";
+import type { RepairQuoteStatus } from "../interfaces";
 
 const filter = (node: HTMLElement) => {
   const exclusionTags = ["BUTTON"];
@@ -24,19 +25,19 @@ const filter = (node: HTMLElement) => {
 
 export const useMabCalculus = () => {
   const { closeDialog, openDialog } = useAlert();
+  const [repairQuoteId, setRepairQuoteId] = useState<number | null>(null);
 
   const repairParts = useRepairParts();
   const clientData = useClientData();
-
-  const [quoteStatus, setQuoteStatus] = useState<"new" | "saved" | "shared">(
-    "new",
-  );
 
   const [quoteDate, setQuoteDate] = useState(todayLabel());
   const [labor, setLabor] = useState(0);
   const [advance, setAdvance] = useState(0);
   const [warranty, setWarranty] = useState(3);
   const [loading, setLoading] = useState(true);
+  const [quoteStatus, setQuoteStatus] = useState<RepairQuoteStatus>(
+    !repairQuoteId ? "new" : "saved",
+  );
 
   const receiptRef = useRef<HTMLDivElement>(null);
   const [isTakingPicture, setIsTakingPicture] = useState(false);
@@ -51,11 +52,13 @@ export const useMabCalculus = () => {
     let cancelled = false;
 
     async function load() {
-      const catalog = await getParts();
-      const draft = await getDraft();
       if (cancelled) return;
 
+      const catalog = await getParts();
+      const draft = await getDraft();
+
       repairParts.actions.setParts(catalog);
+
       if (draft) {
         clientData.actions.setClientData(draft.clientData);
 
@@ -76,6 +79,7 @@ export const useMabCalculus = () => {
     }
 
     load();
+
     return () => {
       cancelled = true;
     };
@@ -121,11 +125,13 @@ export const useMabCalculus = () => {
   const total = balance + labor;
 
   const handleClean = useCallback(() => {
+    setQuoteDate(todayLabel());
     clearDraft().catch(() => {});
 
     clientData.actions.resetClientData();
     repairParts.actions.resetRepairParts();
 
+    setRepairQuoteId(null);
     setLabor(0);
     setAdvance(0);
 
@@ -204,9 +210,10 @@ export const useMabCalculus = () => {
     const repairQuote = await getRepairQuoteById(id);
     if (!repairQuote) return;
 
+    setRepairQuoteId(repairQuote.id);
     setQuoteDate(repairQuote.date);
     clientData.actions.setClientData(repairQuote.clientData);
-    repairParts.actions.setParts(repairQuote.repairParts);
+    repairParts.actions.setRows(repairQuote.repairRows);
     setAdvance(repairQuote.advance);
     setLabor(repairQuote.labor);
     setWarranty(repairQuote.warranty);
@@ -215,18 +222,23 @@ export const useMabCalculus = () => {
   };
 
   const handleSaveRepairQuote = async () => {
+    console.log(clientData.actions.getClientData());
+
     const repairQuote = await saveRepairQuote(
       quoteDate,
       clientData.actions.getClientData(),
-      repairParts.state.parts,
+      repairParts.state.rows,
       advance,
       labor,
       warranty,
       false,
+      "new",
     );
 
     if (repairQuote.id) {
-      setQuoteStatus("saved");
+      setQuoteStatus("new");
+
+      setRepairQuoteId(repairQuote.id);
     }
   };
 
