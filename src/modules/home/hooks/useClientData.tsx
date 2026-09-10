@@ -48,7 +48,7 @@ export const useClientData = () => {
 
   const getClientData = useCallback((): DraftClientData => {
     return { name, address, phone };
-  }, []);
+  }, [name, address, phone]);
 
   return useMemo(
     () => ({
