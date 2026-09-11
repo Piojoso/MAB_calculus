@@ -120,7 +120,6 @@ export const useMabCalculus = () => {
       ),
     [repairParts],
   );
-
   const balance = partsSubtotal - advance;
   const total = balance + labor;
 
@@ -230,6 +229,7 @@ export const useMabCalculus = () => {
       repairParts.state.rows,
       advance,
       labor,
+      total,
       warranty,
       false,
       "new",

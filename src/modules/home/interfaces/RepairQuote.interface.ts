@@ -9,6 +9,7 @@ export interface RepairQuote {
   repairRows: Row[];
   advance: number;
   labor: number;
+  total: number;
   warranty: number;
   shared: boolean;
   status: RepairQuoteStatus;
