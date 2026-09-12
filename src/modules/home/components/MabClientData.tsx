@@ -49,7 +49,7 @@ export const MabClientData = (props: Props) => {
           onClick={handleToggleEditing}
           variant="ghost"
           size="sm"
-          className="h-8 text-xs text-muted-foreground hover:text-destructive"
+          className="h-8 text-xs text-muted-foreground hover:text-primary"
         >
           <Pencil className="mr-1 h-3 w-3.5" />
           Editar

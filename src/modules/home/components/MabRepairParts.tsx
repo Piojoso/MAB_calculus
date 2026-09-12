@@ -75,7 +75,7 @@ export const MabRepairParts = (props: Props) => {
             onClick={handleToggleIsEditing}
             variant="ghost"
             size="sm"
-            className="h-8 text-xs text-muted-foreground hover:text-destructive"
+            className="h-8 text-xs text-muted-foreground hover:text-primary"
           >
             {props.isEditing ? (
               <>

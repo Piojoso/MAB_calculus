@@ -133,6 +133,7 @@ export const useMabCalculus = () => {
     setRepairQuoteId(null);
     setLabor(0);
     setAdvance(0);
+    setWarranty(3);
 
     closeDialog();
   }, [clientData, repairParts, closeDialog]);
