@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Pencil, Plus, X } from "lucide-react";
+import { CheckCircle, Pencil, Plus, X } from "lucide-react";
 import { CustomSummaryLine } from "@/components/custom/CustomSummaryLine";
 
 import type { RepairPart, Row } from "../interfaces";
@@ -77,8 +77,17 @@ export const MabRepairParts = (props: Props) => {
             size="sm"
             className="h-8 text-xs text-muted-foreground hover:text-destructive"
           >
-            <Pencil className="mr-1 h-3 w-3.5" />
-            Editar
+            {props.isEditing ? (
+              <>
+                <CheckCircle className="mr-1 h-3 w-3.5" />
+                Confirmar
+              </>
+            ) : (
+              <>
+                <Pencil className="mr-1 h-3 w-3.5" />
+                Editar
+              </>
+            )}
           </Button>
         </div>
 
