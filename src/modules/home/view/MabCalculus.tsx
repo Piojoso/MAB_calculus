@@ -37,23 +37,21 @@ export const MabCalculus = () => {
             </div>
           </div>
 
-          <div className="">
-            <div className="rounded-2xl bg-card p-5 shadow-lg">
-              {/* Header */}
-              <MabCalculusHeader {...store.state} {...store.actions} />
+          <div className="rounded-2xl bg-card p-5 shadow-lg">
+            {/* Header */}
+            <MabCalculusHeader {...store.state} {...store.actions} />
 
-              <hr className="my-4" />
+            <hr className="my-4" />
 
-              <MabClientData {...clientData.state} {...clientData.actions} />
+            <MabClientData {...clientData.state} {...clientData.actions} />
 
-              <hr className="my-4" />
+            <hr className="my-4" />
 
-              <MabRepairParts {...repairParts.state} {...repairParts.actions} />
+            <MabRepairParts {...repairParts.state} {...repairParts.actions} />
 
-              <hr className="my-4" />
+            <hr className="my-4" />
 
-              <MabTotals {...store.state} {...store.actions} />
-            </div>
+            <MabTotals {...store.state} {...store.actions} />
           </div>
         </div>
 
@@ -62,7 +60,7 @@ export const MabCalculus = () => {
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-background/90 p-4 backdrop-blur-sm">
-        <div className="mx-auto w-full max-w-md">
+        <div className="mx-auto w-full max-w-md px-4">
           {store.state.quoteStatus === "new" && (
             <Button
               size="lg"
