@@ -10,6 +10,7 @@ import {
   getRepairQuoteById,
   saveDraft,
   saveRepairQuote,
+  updateRepairQuote,
 } from "@/lib/db";
 import { useAlert } from "@/providers/AlertDialogProvider";
 import { CleanDialog } from "../components/CleanDialog";
@@ -178,6 +179,8 @@ export const useMabCalculus = () => {
     link.href = dataUrl;
     link.download = "presupuesto.png";
     link.click();
+
+    await updateRepairQuote(repairQuoteId!, { status: "shared" });
   }, []);
 
   const handleOpenCleanDialog = useCallback(() => {
@@ -237,7 +240,7 @@ export const useMabCalculus = () => {
     );
 
     if (repairQuote.id) {
-      setQuoteStatus("new");
+      setQuoteStatus("saved");
 
       setRepairQuoteId(repairQuote.id);
     }

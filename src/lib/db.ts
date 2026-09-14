@@ -33,6 +33,7 @@ async function getDb(): Promise<RepairQuoteDb> {
   return dbPromise;
 }
 
+/** Repair Quote */
 export async function getRepairQuotes(): Promise<RepairQuote[]> {
   const db = await getDb();
 
@@ -85,6 +86,21 @@ export async function saveRepairQuote(
   };
 }
 
+export async function updateRepairQuote(
+  id: number,
+  repairPart: Partial<RepairQuote>,
+): Promise<RepairQuote | undefined> {
+  const db = await getDb();
+  const updated = await db.historic.update(id, repairPart);
+
+  if (updated) {
+    return await getRepairQuoteById(id);
+  }
+
+  return;
+}
+
+/** Repair Parts */
 export async function getParts(): Promise<RepairPart[]> {
   const db = await getDb();
   return await db.parts.orderBy("name").toArray();
@@ -104,6 +120,7 @@ export async function deletePart(id: number): Promise<void> {
   await db.parts.delete(id);
 }
 
+/** Draft */
 const DRAFT_ID = 1;
 
 export async function getDraft(): Promise<DraftQuote | undefined> {
