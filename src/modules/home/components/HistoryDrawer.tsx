@@ -20,6 +20,8 @@ import { formatMoney } from "../helpers/helpers";
 import { Badge } from "@/components/ui/badge";
 
 interface Props {
+  repairQuoteId: number | null;
+
   handleSelectOldRepairQuote: (id: number) => Promise<void>;
 }
 
@@ -61,6 +63,7 @@ export const HistoryDrawer = (props: Props) => {
             variant="outline"
             orientation="vertical"
             size={"lg"}
+            value={props.repairQuoteId ? [props.repairQuoteId.toString()] : []}
             spacing={2}
             className="w-full"
           >
