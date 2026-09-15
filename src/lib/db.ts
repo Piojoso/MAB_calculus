@@ -7,44 +7,28 @@ import type {
   RepairQuoteStatus,
   Row,
 } from "@/modules/home/interfaces";
-import type { Dexie, EntityTable } from "dexie";
+import { Dexie, type EntityTable } from "dexie";
 
-type RepairQuoteDb = Dexie & {
+export const db = new Dexie("Mab_Quotes_DB") as Dexie & {
   parts: EntityTable<RepairPart, "id">;
   draft: EntityTable<DraftQuote, "id">;
   historic: EntityTable<RepairQuote, "id">;
 };
 
-let dbPromise: Promise<RepairQuoteDb> | null = null;
-
-async function getDb(): Promise<RepairQuoteDb> {
-  if (!dbPromise) {
-    dbPromise = (async () => {
-      const { Dexie } = await import("dexie");
-      const db = new Dexie("PresupuestosDB") as RepairQuoteDb;
-      db.version(1).stores({
-        parts: "++id, name",
-        draft: "++id",
-        historic: "++id, date",
-      });
-      return db;
-    })();
-  }
-  return dbPromise;
-}
+db.version(1).stores({
+  parts: "++id, name",
+  draft: "++id",
+  historic: "++id, date",
+});
 
 /** Repair Quote */
 export async function getRepairQuotes(): Promise<RepairQuote[]> {
-  const db = await getDb();
-
   return await db.historic.orderBy("date").reverse().toArray();
 }
 
 export async function getRepairQuoteById(
   id: number,
 ): Promise<RepairQuote | undefined> {
-  const db = await getDb();
-
   return await db.historic.get(id);
 }
 
@@ -59,7 +43,6 @@ export async function saveRepairQuote(
   shared: boolean,
   status: RepairQuoteStatus,
 ): Promise<RepairQuote> {
-  const db = await getDb();
   const id = await db.historic.add({
     date,
     clientData,
@@ -90,7 +73,6 @@ export async function updateRepairQuote(
   id: number,
   repairPart: Partial<RepairQuote>,
 ): Promise<RepairQuote | undefined> {
-  const db = await getDb();
   const updated = await db.historic.update(id, repairPart);
 
   if (updated) {
@@ -102,7 +84,6 @@ export async function updateRepairQuote(
 
 /** Repair Parts */
 export async function getParts(): Promise<RepairPart[]> {
-  const db = await getDb();
   return await db.parts.orderBy("name").toArray();
 }
 
@@ -110,13 +91,11 @@ export async function addPart(
   name: string,
   defaultPrice: number,
 ): Promise<RepairPart> {
-  const db = await getDb();
   const id = await db.parts.add({ name, defaultPrice });
   return { id: id as number, name, defaultPrice };
 }
 
 export async function deletePart(id: number): Promise<void> {
-  const db = await getDb();
   await db.parts.delete(id);
 }
 
@@ -124,7 +103,6 @@ export async function deletePart(id: number): Promise<void> {
 const DRAFT_ID = 1;
 
 export async function getDraft(): Promise<DraftQuote | undefined> {
-  const db = await getDb();
   return await db.draft.get(DRAFT_ID);
 }
 
@@ -134,7 +112,6 @@ export async function saveDraft(
   labor: number,
   advance: number,
 ): Promise<void> {
-  const db = await getDb();
   const existing = await db.draft.get(DRAFT_ID);
 
   const draftBody = {
@@ -153,6 +130,5 @@ export async function saveDraft(
 }
 
 export async function clearDraft(): Promise<void> {
-  const db = await getDb();
   await db.draft.delete(DRAFT_ID);
 }

@@ -126,6 +126,8 @@ export const useMabCalculus = () => {
 
   const handleClean = useCallback(() => {
     setQuoteDate(todayLabel());
+    setQuoteStatus("new");
+
     clearDraft().catch(() => {});
 
     clientData.actions.resetClientData();
@@ -181,7 +183,7 @@ export const useMabCalculus = () => {
     link.click();
 
     await updateRepairQuote(repairQuoteId!, { status: "shared" });
-  }, []);
+  }, [repairQuoteId]);
 
   const handleOpenCleanDialog = useCallback(() => {
     openDialog(<CleanDialog onConfirm={handleClean} onCancel={closeDialog} />);
@@ -220,13 +222,12 @@ export const useMabCalculus = () => {
     setAdvance(repairQuote.advance);
     setLabor(repairQuote.labor);
     setWarranty(repairQuote.warranty);
+    setQuoteStatus(repairQuote.status);
 
     // setIsEditingDisabled(repairQuote.shared);
   };
 
   const handleSaveRepairQuote = async () => {
-    console.log(clientData.actions.getClientData());
-
     const repairQuote = await saveRepairQuote(
       quoteDate,
       clientData.actions.getClientData(),
@@ -236,7 +237,7 @@ export const useMabCalculus = () => {
       total,
       warranty,
       false,
-      "new",
+      "saved",
     );
 
     if (repairQuote.id) {
