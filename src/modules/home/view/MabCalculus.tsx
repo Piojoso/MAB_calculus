@@ -25,7 +25,7 @@ export const MabCalculus = () => {
       <div className="mx-auto w-full max-w-md">
         <div ref={store.state.receiptRef} className="space-y-4 py-4 px-4">
           <div className="relative">
-            <HistoryDrawer {...store.actions} />
+            <HistoryDrawer {...store.state} {...store.actions} />
 
             <div className="text-center">
               <h1 className="text-2xl font-semibold text-indigo-500 ">M A B</h1>
@@ -72,7 +72,7 @@ export const MabCalculus = () => {
               Guardar presupuesto
             </Button>
           )}
-          {store.state.quoteStatus === "saved" && (
+          {!(store.state.quoteStatus === "new") && (
             <Button
               size="lg"
               className="w-full"
