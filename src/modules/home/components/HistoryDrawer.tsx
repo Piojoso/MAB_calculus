@@ -1,4 +1,5 @@
-import { use, useState } from "react";
+import { useState } from "react";
+import { useLiveQuery } from "dexie-react-hooks";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,19 +15,20 @@ import {
 import { History } from "lucide-react";
 
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { getRepairQuotes } from "@/lib/db";
+import { db } from "@/lib/db";
 import { formatMoney } from "../helpers/helpers";
+import { Badge } from "@/components/ui/badge";
 
 interface Props {
   handleSelectOldRepairQuote: (id: number) => Promise<void>;
 }
 
-const repairQuotesPromise = getRepairQuotes();
-
 export const HistoryDrawer = (props: Props) => {
   const [open, setOpen] = useState(false);
 
-  const repairQuotes = use(repairQuotesPromise);
+  const repairQuotes = useLiveQuery(() =>
+    db.historic.orderBy("date").reverse().toArray(),
+  );
 
   const handleClickOnItem = (id: number) => {
     setOpen(false);
@@ -62,7 +64,7 @@ export const HistoryDrawer = (props: Props) => {
             spacing={2}
             className="w-full"
           >
-            {repairQuotes.map((quote) => (
+            {repairQuotes?.map((quote) => (
               <ToggleGroupItem
                 key={quote.id}
                 value={quote.id.toString()}
@@ -78,10 +80,16 @@ export const HistoryDrawer = (props: Props) => {
                   </span>
                 </div>
 
-                <div className="mt-2 text-left">
+                <div className="flex flex-row items-center justify-between w-full gap-4">
                   <span className="text-lg font-bold text-primary">
                     {formatMoney(quote.total)}
                   </span>
+                  {quote.status === "saved" && (
+                    <Badge variant="outline">Guardado</Badge>
+                  )}
+                  {quote.status === "shared" && (
+                    <Badge variant="default">Enviado</Badge>
+                  )}
                 </div>
               </ToggleGroupItem>
             ))}
