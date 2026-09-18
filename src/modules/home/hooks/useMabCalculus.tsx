@@ -284,6 +284,8 @@ export const useMabCalculus = () => {
       },
     }),
     [
+      clientData,
+      repairParts,
       loading,
       receiptRef,
       partsSubtotal,

@@ -60,7 +60,12 @@ export const MabCalculus = () => {
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-background/90 p-4 backdrop-blur-sm">
-        <div className="mx-auto w-full max-w-md px-4">
+        <div className="mx-auto w-full max-w-md px-4 space-y-4">
+          {store.state.quoteStatus === "shared" && (
+            <span className="flex justify-center items-center font-bold">
+              Previsualizando factura antigua.
+            </span>
+          )}
           {store.state.quoteStatus === "new" && (
             <Button
               size="lg"
