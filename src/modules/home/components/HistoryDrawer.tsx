@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 
 import { Button } from "@/components/ui/button";
@@ -13,11 +13,13 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { History } from "lucide-react";
-
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { db } from "@/lib/db";
-import { formatMoney } from "../helpers/helpers";
 import { Badge } from "@/components/ui/badge";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Label } from "@/components/ui/label";
+
+import { db } from "@/lib/db";
+import { CustomInput } from "@/components/custom/CustomInput";
+import { formatMoney } from "../helpers/helpers";
 
 interface Props {
   repairQuoteId: number | null;
@@ -27,10 +29,24 @@ interface Props {
 
 export const HistoryDrawer = (props: Props) => {
   const [open, setOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
 
   const repairQuotes = useLiveQuery(() =>
     db.historic.orderBy("date").reverse().toArray(),
   );
+
+  const filteredQuotes = useMemo(() => {
+    if (searchInput.trim() === "") return repairQuotes;
+
+    const query = searchInput.toLowerCase();
+
+    return repairQuotes?.filter(
+      (quote) =>
+        quote.clientData.name.toLowerCase().includes(query) ||
+        quote.clientData.address.toLowerCase().includes(query) ||
+        quote.clientData.phone.toLowerCase().includes(query),
+    );
+  }, [repairQuotes, searchInput]);
 
   const handleClickOnItem = (id: number) => {
     setOpen(false);
@@ -59,6 +75,27 @@ export const HistoryDrawer = (props: Props) => {
           </DrawerDescription>
         </DrawerHeader>
         <div className="h-full p-4">
+          <div className="flex flex-col gap-4 mb-4">
+            <hr />
+
+            <div>
+              <Label
+                htmlFor="search-input"
+                className="text-sm text-muted-foreground mb-1"
+              >
+                Buscar Presupuesto
+              </Label>
+              <CustomInput
+                id="search-input"
+                placeholder="Nombre, dirección o teléfono del cliente"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value || "")}
+              />
+            </div>
+
+            <hr />
+          </div>
+
           <ToggleGroup
             variant="outline"
             orientation="vertical"
@@ -67,7 +104,7 @@ export const HistoryDrawer = (props: Props) => {
             spacing={2}
             className="w-full"
           >
-            {repairQuotes?.map((quote) => (
+            {filteredQuotes?.map((quote) => (
               <ToggleGroupItem
                 key={quote.id}
                 value={quote.id.toString()}
@@ -82,7 +119,11 @@ export const HistoryDrawer = (props: Props) => {
                     {quote.date}
                   </span>
                 </div>
-
+                <div>
+                  <span className="text-sm text-muted-foreground">
+                    {quote.clientData.address} - {quote.clientData.phone}
+                  </span>
+                </div>
                 <div className="flex flex-row items-center justify-between w-full gap-4">
                   <span className="text-lg font-bold text-primary">
                     {formatMoney(quote.total)}
