@@ -21,7 +21,7 @@ export const MabCalculusHeader = ({
           Presupuesto de reparación
         </h2>
 
-        <p className="text-xs text-muted-foreground">{quoteDate}</p>
+        <p className="text-sm text-muted-foreground">{quoteDate}</p>
       </div>
 
       {!isTakingPicture && (
