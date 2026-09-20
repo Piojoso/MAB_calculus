@@ -17,6 +17,7 @@ import { CleanDialog } from "../components/CleanDialog";
 import { useRepairParts } from "./useRepairParts";
 import { useClientData } from "./useClientData";
 import type { RepairQuoteStatus } from "../interfaces";
+import { toast } from "sonner";
 
 const filter = (node: HTMLElement) => {
   const exclusionTags = ["BUTTON"];
@@ -228,6 +229,10 @@ export const useMabCalculus = () => {
   };
 
   const handleSaveRepairQuote = async () => {
+    const toastId = toast("Sonner");
+
+    toast.loading("Guardando...", { id: toastId });
+
     const repairQuote = await saveRepairQuote(
       quoteDate,
       clientData.actions.getClientData(),
@@ -244,6 +249,11 @@ export const useMabCalculus = () => {
       setQuoteStatus("saved");
 
       setRepairQuoteId(repairQuote.id);
+
+      toast.success("Guardado", {
+        id: toastId,
+        description: "Presupuesto de reparación guardado exitosamente.",
+      });
     }
   };
 
