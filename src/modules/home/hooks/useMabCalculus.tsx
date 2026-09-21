@@ -18,6 +18,7 @@ import { useRepairParts } from "./useRepairParts";
 import { useClientData } from "./useClientData";
 import type { RepairQuoteStatus } from "../interfaces";
 import { toast } from "sonner";
+import { NotCompletedQuoteDialog } from "../components/NotCompletedQuoteDialog";
 
 const filter = (node: HTMLElement) => {
   const exclusionTags = ["BUTTON"];
@@ -149,46 +150,90 @@ export const useMabCalculus = () => {
     repairParts.actions.setIsEditing(false);
   };
 
-  const handleShare = useCallback(async () => {
-    if (!receiptRef.current) return;
+  const validateQuoteInformation = useCallback(() => {
+    const isClientDataEmpty = clientData.state.isEmpty();
+    const isRepairPartsEmpty = repairParts.state.isEmpty();
 
-    setIsTakingPicture(true);
-    prepareForPicture();
+    const emptyItems = [];
 
-    const dataUrl = await toPng(receiptRef.current, {
-      pixelRatio: 2,
-      backgroundColor: "#eef2ff",
-      filter: filter,
-    });
-    setIsTakingPicture(false);
+    isClientDataEmpty &&
+      emptyItems.push("Nombre, dirección o teléfono del Cliente");
 
-    const blob = await (await fetch(dataUrl)).blob();
-    const file = new File([blob], "presupuesto.png", { type: "image/png" });
+    isRepairPartsEmpty &&
+      emptyItems.push(
+        "Sin repuestos registrados o al menos uno no tiene precio",
+      );
 
-    try {
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          files: [file],
-          title: "Presupuesto",
-          text: "Te paso el presupuesto de la reparación",
-        });
-        return;
+    labor <= 0 && emptyItems.push("Sin mano de obra registrada");
+    warranty <= 0 && emptyItems.push("Sin garantía registrada");
+
+    return emptyItems;
+  }, [clientData, repairParts, labor, warranty]);
+
+  const handleShare = useCallback(
+    async (validate: boolean = true) => {
+      if (!receiptRef.current) return;
+
+      if (validate) {
+        const emptyItems = validateQuoteInformation();
+        if (emptyItems.length > 0) {
+          handleOpenNotCompletedQuoteDialog(emptyItems);
+          return;
+        }
       }
-    } catch {
-      // Share failed or cancelled; fall back to download.
-    }
 
-    const link = document.createElement("a");
-    link.href = dataUrl;
-    link.download = "presupuesto.png";
-    link.click();
+      setIsTakingPicture(true);
+      prepareForPicture();
 
-    await updateRepairQuote(repairQuoteId!, { status: "shared" });
-  }, [repairQuoteId]);
+      const dataUrl = await toPng(receiptRef.current, {
+        pixelRatio: 2,
+        backgroundColor: "#eef2ff",
+        filter: filter,
+      });
+      setIsTakingPicture(false);
+
+      const blob = await (await fetch(dataUrl)).blob();
+      const file = new File([blob], "presupuesto.png", { type: "image/png" });
+
+      try {
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: "Presupuesto",
+            text: "Te paso el presupuesto de la reparación",
+          });
+          return;
+        }
+      } catch {
+        // Share failed or cancelled; fall back to download.
+      }
+
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = "presupuesto.png";
+      link.click();
+
+      await updateRepairQuote(repairQuoteId!, { status: "shared" });
+    },
+    [validateQuoteInformation, repairQuoteId],
+  );
 
   const handleOpenCleanDialog = useCallback(() => {
     openDialog(<CleanDialog onConfirm={handleClean} onCancel={closeDialog} />);
-  }, []);
+  }, [closeDialog, openDialog]);
+
+  const handleOpenNotCompletedQuoteDialog = useCallback(
+    (emptyItems: string[]) => {
+      openDialog(
+        <NotCompletedQuoteDialog
+          emptyItems={emptyItems}
+          onConfirm={() => handleShare(false)}
+          onCancel={closeDialog}
+        />,
+      );
+    },
+    [closeDialog, handleShare],
+  );
 
   const focusInputReference = (input: "labor" | "advance" | "warranty") => {
     switch (input) {

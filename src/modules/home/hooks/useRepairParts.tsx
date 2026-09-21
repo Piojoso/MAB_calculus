@@ -87,6 +87,7 @@ export const useRepairParts = () => {
         newPartPrice,
         pendingRowId,
         isEditing,
+        isEmpty: () => rows.length === 0 || rows.some((r) => r.price <= 0),
       },
       actions: {
         setParts,

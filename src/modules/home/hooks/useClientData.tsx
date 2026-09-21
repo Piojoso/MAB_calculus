@@ -52,7 +52,13 @@ export const useClientData = () => {
 
   return useMemo(
     () => ({
-      state: { name, address, phone, isEditing },
+      state: {
+        name,
+        address,
+        phone,
+        isEditing,
+        isEmpty: () => !name || !address || !phone,
+      },
       actions: {
         setName,
         setAddress,
