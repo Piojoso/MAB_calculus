@@ -30,7 +30,7 @@ export const NotCompletedQuoteDialog = ({
         </AlertDialogDescription>
         <ul className="list-disc pl-5 mt-3 space-y-1 text-sm text-muted-foreground">
           {emptyItems?.map((item) => (
-            <li>{item}</li>
+            <li key={item}>{item}</li>
           ))}
         </ul>
       </AlertDialogHeader>
