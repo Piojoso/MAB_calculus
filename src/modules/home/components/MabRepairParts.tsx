@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { CheckCircle, Pencil, Plus, X } from "lucide-react";
 import { CustomSummaryLine } from "@/components/custom/CustomSummaryLine";
 
-import type { RepairPart, Row } from "../interfaces";
+import type { RepairPart, RepairQuoteStatus, Row } from "../interfaces";
 import { formatMoney } from "../helpers/helpers";
 
 const ADD_NEW = "__add_new__";
@@ -27,6 +27,8 @@ interface Props {
   newPartPrice: string;
   isEditing: boolean;
 
+  quoteStatus: RepairQuoteStatus;
+
   handlePartSelect: (rowId: string, value: string) => void;
   updateRow: (id: string, patch: Partial<Row>) => void;
   removeRow: (id: string) => void;
@@ -39,6 +41,8 @@ interface Props {
 }
 
 export const MabRepairParts = (props: Props) => {
+  const isEditDisabled = props.quoteStatus === "shared";
+
   const getPartPrice = useCallback(
     (row: Row) => formatMoney(row.price),
     [props.rows],
@@ -72,6 +76,7 @@ export const MabRepairParts = (props: Props) => {
             Repuestos
           </h3>
           <Button
+            disabled={isEditDisabled}
             onClick={handleToggleIsEditing}
             variant="ghost"
             size="sm"

@@ -43,11 +43,19 @@ export const MabCalculus = () => {
 
             <hr className="my-4" />
 
-            <MabClientData {...clientData.state} {...clientData.actions} />
+            <MabClientData
+              quoteStatus={store.state.quoteStatus}
+              {...clientData.state}
+              {...clientData.actions}
+            />
 
             <hr className="my-4" />
 
-            <MabRepairParts {...repairParts.state} {...repairParts.actions} />
+            <MabRepairParts
+              quoteStatus={store.state.quoteStatus}
+              {...repairParts.state}
+              {...repairParts.actions}
+            />
 
             <hr className="my-4" />
 
@@ -82,7 +90,7 @@ export const MabCalculus = () => {
               size="lg"
               className="w-full"
               variant="default"
-              onClick={store.actions.handleShare}
+              onClick={() => store.actions.handleShare()}
             >
               <Share2 className="mr-2 h-5 w-5" />
               Enviar presupuesto

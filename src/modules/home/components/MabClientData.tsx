@@ -11,13 +11,15 @@ import {
 import { Label } from "@/components/ui/label";
 
 import { CustomInput } from "@/components/custom/CustomInput";
-import type { DraftClientData } from "../interfaces";
+import type { DraftClientData, RepairQuoteStatus } from "../interfaces";
 
 interface Props {
   name: string;
   address: string;
   phone: string;
   isEditing: boolean;
+
+  quoteStatus: RepairQuoteStatus;
 
   setName: React.Dispatch<React.SetStateAction<string>>;
   setAddress: React.Dispatch<React.SetStateAction<string>>;
@@ -31,6 +33,8 @@ export const MabClientData = (props: Props) => {
   const [localName, setLocalName] = useState(props.name);
   const [localAddress, setLocalAddress] = useState(props.address);
   const [localPhone, setLocalPhone] = useState(props.phone);
+
+  const isEditDisabled = props.quoteStatus === "shared";
 
   const handleToggleEditing = () => {
     setLocalName(props.name);
@@ -46,6 +50,7 @@ export const MabClientData = (props: Props) => {
           Información del Cliente
         </h3>
         <Button
+          disabled={isEditDisabled}
           onClick={handleToggleEditing}
           variant="ghost"
           size="sm"

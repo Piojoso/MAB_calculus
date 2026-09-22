@@ -176,6 +176,7 @@ export const useMabCalculus = () => {
 
       if (validate) {
         const emptyItems = validateQuoteInformation();
+
         if (emptyItems.length > 0) {
           handleOpenNotCompletedQuoteDialog(emptyItems);
           return;

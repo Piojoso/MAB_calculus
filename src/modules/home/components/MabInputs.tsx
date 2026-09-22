@@ -1,5 +1,6 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import type { RepairQuoteStatus } from "../interfaces";
 
 interface Props {
   advance: number;
@@ -9,12 +10,16 @@ interface Props {
   laborInputRef: React.RefObject<HTMLInputElement | null>;
   warrantyInputRef: React.RefObject<HTMLInputElement | null>;
 
+  quoteStatus: RepairQuoteStatus;
+
   setAdvance: React.Dispatch<React.SetStateAction<number>>;
   setLabor: React.Dispatch<React.SetStateAction<number>>;
   setWarranty: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const MabInputs = (props: Props) => {
+  const isEditDisabled = props.quoteStatus === "shared";
+
   return (
     <>
       <div className="mt-1 mx-4 space-y-4 rounded-xl bg-card p-4 shadow-sm">
@@ -30,6 +35,7 @@ export const MabInputs = (props: Props) => {
             step="0.01"
             min={0}
             value={props.advance || 0}
+            disabled={isEditDisabled}
             onChange={(e) =>
               props.setAdvance(Number.parseFloat(e.target.value) || 0)
             }
@@ -50,6 +56,7 @@ export const MabInputs = (props: Props) => {
             step="0.01"
             min={0}
             value={props.labor || 0}
+            disabled={isEditDisabled}
             onChange={(e) =>
               props.setLabor(Number.parseFloat(e.target.value) || 0)
             }
@@ -70,6 +77,7 @@ export const MabInputs = (props: Props) => {
             step="1"
             min={0}
             value={props.warranty || 0}
+            disabled={isEditDisabled}
             onChange={(e) =>
               props.setWarranty(Number.parseFloat(e.target.value) || 0)
             }
