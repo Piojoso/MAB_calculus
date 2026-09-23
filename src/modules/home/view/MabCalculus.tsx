@@ -74,28 +74,39 @@ export const MabCalculus = () => {
               Previsualizando factura antigua.
             </span>
           )}
-          {store.state.quoteStatus === "new" && (
+
+          <div className="flex flex-row">
             <Button
               size="lg"
-              className="w-full border-indigo-500 text-indigo-500"
+              className={`
+                border-indigo-500 text-indigo-500
+                transition-all duration-500 ease-in-out overflow-hidden whitespace-nowrap
+                ${store.state.quoteStatus === "new" ? "w-full" : ""}
+                ${store.state.quoteStatus === "saved" ? "w-[calc(50%-8px)] mr-2" : ""}
+                ${store.state.quoteStatus === "shared" ? "w-0 p-0 opacity-0 pointer-events-none" : ""}
+              `}
               variant="outline"
               onClick={store.actions.handleSaveRepairQuote}
             >
               <Save className="mr-2 h-5 w-5" />
               Guardar presupuesto
             </Button>
-          )}
-          {!(store.state.quoteStatus === "new") && (
+
             <Button
               size="lg"
-              className="w-full"
+              className={`
+                transition-all duration-500 ease-in-out overflow-hidden whitespace-nowrap
+                ${store.state.quoteStatus === "new" ? "w-0 p-0 opacity-0 pointer-events-none" : ""}
+                ${store.state.quoteStatus === "saved" ? "w-[calc(50%-8px)] ml-2" : ""}
+                ${store.state.quoteStatus === "shared" ? "w-full" : ""}
+              `}
               variant="default"
               onClick={() => store.actions.handleShare()}
             >
               <Share2 className="mr-2 h-5 w-5" />
               Enviar presupuesto
             </Button>
-          )}
+          </div>
         </div>
       </div>
     </main>
