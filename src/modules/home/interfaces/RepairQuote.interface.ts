@@ -11,6 +11,5 @@ export interface RepairQuote {
   labor: number;
   total: number;
   warranty: number;
-  shared: boolean;
   status: RepairQuoteStatus;
 }

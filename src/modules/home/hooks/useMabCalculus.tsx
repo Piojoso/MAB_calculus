@@ -279,19 +279,29 @@ export const useMabCalculus = () => {
 
     toast.loading("Guardando...", { id: toastId });
 
-    const repairQuote = await saveRepairQuote(
-      quoteDate,
-      clientData.actions.getClientData(),
-      repairParts.state.rows,
-      advance,
-      labor,
-      total,
-      warranty,
-      false,
-      "saved",
-    );
+    const repairQuote =
+      repairQuoteId === null
+        ? await saveRepairQuote(
+            quoteDate,
+            clientData.actions.getClientData(),
+            repairParts.state.rows,
+            advance,
+            labor,
+            total,
+            warranty,
+            "saved",
+          )
+        : await updateRepairQuote(repairQuoteId, {
+            date: quoteDate,
+            clientData: clientData.actions.getClientData(),
+            repairRows: repairParts.state.rows,
+            advance,
+            labor,
+            total,
+            warranty,
+          });
 
-    if (repairQuote.id) {
+    if (repairQuote?.id) {
       setQuoteStatus("saved");
 
       setRepairQuoteId(repairQuote.id);

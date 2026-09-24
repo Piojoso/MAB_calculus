@@ -40,7 +40,6 @@ export async function saveRepairQuote(
   labor: number,
   total: number,
   warranty: number,
-  shared: boolean,
   status: RepairQuoteStatus,
 ): Promise<RepairQuote> {
   const id = await db.historic.add({
@@ -51,7 +50,6 @@ export async function saveRepairQuote(
     labor,
     total,
     warranty,
-    shared,
     status,
   });
 
@@ -64,7 +62,6 @@ export async function saveRepairQuote(
     labor,
     total,
     warranty,
-    shared,
     status,
   };
 }
