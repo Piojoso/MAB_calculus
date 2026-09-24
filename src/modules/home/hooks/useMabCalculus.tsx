@@ -63,8 +63,8 @@ export const useMabCalculus = () => {
       repairParts.actions.setParts(catalog);
 
       if (draft) {
-        if (draft.requestId) {
-          handleSelectOldRepairQuote(draft.requestId);
+        if (draft.quoteId) {
+          handleSelectOldRepairQuote(draft.quoteId);
         } else {
           clientData.actions.setClientData(draft.clientData);
 
