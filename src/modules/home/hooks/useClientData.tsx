@@ -27,6 +27,7 @@ export const useClientData = () => {
       const draftData = await db.getDraft();
 
       await db.saveDraft(
+        draftData?.quoteId ?? null,
         newClientData,
         draftData?.parts ?? [],
         draftData?.labor ?? 0,
