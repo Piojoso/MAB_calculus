@@ -3,6 +3,7 @@ export type DraftPartData = { partId: number | null; price: number };
 
 export interface DraftQuote {
   id: number;
+  requestId: number | null;
   clientData: DraftClientData;
   parts: DraftPartData[];
   labor: number;

@@ -63,19 +63,23 @@ export const useMabCalculus = () => {
       repairParts.actions.setParts(catalog);
 
       if (draft) {
-        clientData.actions.setClientData(draft.clientData);
+        if (draft.requestId) {
+          handleSelectOldRepairQuote(draft.requestId);
+        } else {
+          clientData.actions.setClientData(draft.clientData);
 
-        repairParts.actions.setRows(
-          draft.parts.length
-            ? draft.parts.map((p) => ({
-                id: Math.random().toString(36).slice(2),
-                partId: p.partId,
-                price: p.price,
-              }))
-            : [emptyRow()],
-        );
-        setLabor(draft.labor);
-        setAdvance(draft.advance);
+          repairParts.actions.setRows(
+            draft.parts.length
+              ? draft.parts.map((p) => ({
+                  id: Math.random().toString(36).slice(2),
+                  partId: p.partId,
+                  price: p.price,
+                }))
+              : [emptyRow()],
+          );
+          setLabor(draft.labor);
+          setAdvance(draft.advance);
+        }
       }
       setLoading(false);
       initialLoadRef.current = true;
@@ -100,6 +104,7 @@ export const useMabCalculus = () => {
       };
 
       saveDraft(
+        repairQuoteId,
         client,
         repairParts.state.rows.map((r) => ({
           partId: r.partId,

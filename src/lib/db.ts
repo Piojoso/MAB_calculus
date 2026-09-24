@@ -104,6 +104,7 @@ export async function getDraft(): Promise<DraftQuote | undefined> {
 }
 
 export async function saveDraft(
+  requestId: number | null,
   clientData: DraftClientData,
   parts: DraftPartData[],
   labor: number,
@@ -112,6 +113,7 @@ export async function saveDraft(
   const existing = await db.draft.get(DRAFT_ID);
 
   const draftBody = {
+    requestId,
     clientData,
     parts,
     labor,
