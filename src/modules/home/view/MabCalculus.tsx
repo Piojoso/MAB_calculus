@@ -89,7 +89,9 @@ export const MabCalculus = () => {
               onClick={store.actions.handleSaveRepairQuote}
             >
               <Save className="mr-2 h-5 w-5" />
-              Guardar presupuesto
+              {store.state.quoteStatus !== "saved"
+                ? "Guardar presupuesto"
+                : "Guardar"}
             </Button>
 
             <Button
@@ -104,7 +106,9 @@ export const MabCalculus = () => {
               onClick={() => store.actions.handleShare()}
             >
               <Share2 className="mr-2 h-5 w-5" />
-              Enviar presupuesto
+              {store.state.quoteStatus !== "saved"
+                ? "Enviar presupuesto"
+                : "Enviar"}
             </Button>
           </div>
         </div>
