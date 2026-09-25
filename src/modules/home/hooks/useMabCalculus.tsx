@@ -208,18 +208,18 @@ export const useMabCalculus = () => {
             title: "Presupuesto",
             text: "Te paso el presupuesto de la reparación",
           });
-          return;
+        } else {
+          const link = document.createElement("a");
+          link.href = dataUrl;
+          link.download = "presupuesto.png";
+          link.click();
         }
+
+        await updateRepairQuote(repairQuoteId!, { status: "shared" });
+        setQuoteStatus("shared");
       } catch {
         // Share failed or cancelled; fall back to download.
       }
-
-      const link = document.createElement("a");
-      link.href = dataUrl;
-      link.download = "presupuesto.png";
-      link.click();
-
-      await updateRepairQuote(repairQuoteId!, { status: "shared" });
     },
     [validateQuoteInformation, repairQuoteId],
   );
@@ -275,8 +275,6 @@ export const useMabCalculus = () => {
     setLabor(repairQuote.labor);
     setWarranty(repairQuote.warranty);
     setQuoteStatus(repairQuote.status);
-
-    // setIsEditingDisabled(repairQuote.shared);
   };
 
   const handleSaveRepairQuote = async () => {
