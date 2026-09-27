@@ -12,7 +12,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { History } from "lucide-react";
+import { CheckCircle, CircleXIcon, History, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Label } from "@/components/ui/label";
@@ -20,6 +20,7 @@ import { Label } from "@/components/ui/label";
 import { db } from "@/lib/db";
 import { CustomInput } from "@/components/custom/CustomInput";
 import { formatMoney } from "../helpers/helpers";
+import { useConfirmation } from "../hooks/useConfirmation";
 
 interface Props {
   repairQuoteId: number | null;
@@ -30,6 +31,34 @@ interface Props {
 export const HistoryDrawer = (props: Props) => {
   const [open, setOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
+  const [deletingQuoteId, setDeletingQuoteId] = useState<number | null>(null);
+
+  const {
+    isConfirmed: confirmDelete,
+    triggerConfirmation,
+    resetConfirmation,
+  } = useConfirmation();
+
+  const handleDeleteQuote = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    quoteId: number,
+  ) => {
+    event.stopPropagation();
+
+    if (!confirmDelete) {
+      triggerConfirmation();
+      setDeletingQuoteId(quoteId);
+
+      return;
+    }
+
+    if (deletingQuoteId === quoteId) {
+      db.historic.delete(quoteId).then(() => {
+        resetConfirmation();
+        setDeletingQuoteId(null);
+      });
+    }
+  };
 
   const repairQuotes = useLiveQuery(() =>
     db.historic.orderBy("date").reverse().toArray(),
@@ -73,29 +102,28 @@ export const HistoryDrawer = (props: Props) => {
           <DrawerDescription>
             Aquí puedes ver los presupuestos antiguos.
           </DrawerDescription>
-        </DrawerHeader>
-        <div className="h-full p-4">
-          <div className="flex flex-col gap-4 mb-4">
-            <hr />
 
-            <div>
-              <Label
-                htmlFor="search-input"
-                className="text-sm text-muted-foreground mb-1"
-              >
-                Buscar Presupuesto
-              </Label>
-              <CustomInput
-                id="search-input"
-                placeholder="Nombre, dirección o teléfono del cliente"
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value || "")}
-              />
-            </div>
+          <hr className="my-2" />
 
-            <hr />
+          <div>
+            <Label
+              htmlFor="search-input"
+              className="text-sm text-muted-foreground mb-1"
+            >
+              Buscar Presupuesto
+            </Label>
+
+            <CustomInput
+              id="search-input"
+              placeholder="Nombre, dirección o teléfono del cliente"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value || "")}
+            />
           </div>
 
+          <hr className="my-2" />
+        </DrawerHeader>
+        <div className="h-full px-4 scrollbar-auto overflow-auto">
           <ToggleGroup
             variant="outline"
             orientation="vertical"
@@ -115,7 +143,24 @@ export const HistoryDrawer = (props: Props) => {
                   <span className="text-xl font-medium text-foreground truncate">
                     {quote.clientData.name}
                   </span>
-                  <span className="text-lg text-muted-foreground shrink-0">
+
+                  <div
+                    className={`
+                      transform-all duration-500 ease-in-out
+                      h-5 rounded-full text-xs text-destructive inline-flex overflow-clip
+                      ${confirmDelete && deletingQuoteId === quote.id ? "w-20" : ""}
+                      ${!confirmDelete && "w-5"}
+                    `}
+                    onClick={(e) => handleDeleteQuote(e, quote.id)}
+                  >
+                    <X className="mr-1 h-3 w-3.5" />
+                    {confirmDelete && deletingQuoteId === quote.id
+                      ? "Confirmar"
+                      : ""}
+                  </div>
+                </div>
+                <div>
+                  <span className="text-sm text-muted-foreground">
                     {quote.date}
                   </span>
                 </div>
@@ -140,6 +185,7 @@ export const HistoryDrawer = (props: Props) => {
           </ToggleGroup>
         </div>
         <DrawerFooter>
+          <hr className="mt-2" />
           <DrawerClose render={<Button variant="outline">Cerrar</Button>} />
         </DrawerFooter>
       </DrawerContent>
