@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { emptyRow, todayLabel } from "../helpers/helpers";
-
+import { toast } from "sonner";
 import { toPng } from "html-to-image";
 
 import {
@@ -12,13 +11,16 @@ import {
   saveRepairQuote,
   updateRepairQuote,
 } from "@/lib/db";
+import { emptyRow, todayLabel } from "@/helpers/helpers";
+
 import { useAlert } from "@/providers/AlertDialogProvider";
-import { CleanDialog } from "../components/CleanDialog";
-import { useRepairParts } from "./useRepairParts";
-import { useClientData } from "./useClientData";
-import type { RepairQuoteStatus } from "../interfaces";
-import { toast } from "sonner";
-import { NotCompletedQuoteDialog } from "../components/NotCompletedQuoteDialog";
+import { CleanDialog } from "../components/common/CleanDialog";
+import { useRepairParts } from "@/sections/RepairParts/useRepairParts";
+import { useClientData } from "@/sections/ClientData/useClientData";
+
+import type { RepairQuoteStatus } from "@/interfaces";
+
+import { NotCompletedQuoteDialog } from "@/components/common/NotCompletedQuoteDialog";
 
 const filter = (node: HTMLElement) => {
   const exclusionTags = ["BUTTON"];

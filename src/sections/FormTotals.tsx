@@ -1,5 +1,5 @@
-import { CustomSummaryLine } from "@/components/custom/CustomSummaryLine";
-import { formatMoney } from "../helpers/helpers";
+import { CustomSummaryLine } from "@/components/common/customs/CustomSummaryLine";
+import { formatMoney } from "@/helpers/helpers";
 
 interface Props {
   partsSubtotal: number;

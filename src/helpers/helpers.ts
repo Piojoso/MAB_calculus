@@ -1,4 +1,4 @@
-import type { Row } from "../interfaces";
+import type { Row } from "@/interfaces";
 
 export function formatMoney(value: number): string {
   return `$ ${Intl.NumberFormat("es-AR", {

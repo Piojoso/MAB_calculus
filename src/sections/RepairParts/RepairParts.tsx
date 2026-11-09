@@ -11,10 +11,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CheckCircle, Pencil, Plus, X } from "lucide-react";
-import { CustomSummaryLine } from "@/components/custom/CustomSummaryLine";
+import { CustomSummaryLine } from "@/components/common/customs/CustomSummaryLine";
 
-import type { RepairPart, RepairQuoteStatus, Row } from "../interfaces";
-import { formatMoney } from "../helpers/helpers";
+import type { RepairPart, RepairQuoteStatus, Row } from "@/interfaces";
+import { formatMoney } from "@/helpers/helpers";
 
 const ADD_NEW = "__add_new__";
 const EMPTY_PART = "__empty__";

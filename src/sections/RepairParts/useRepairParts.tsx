@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
-import { emptyRow } from "../helpers/helpers";
-import type { RepairPart, Row } from "../interfaces";
+import { emptyRow } from "@/helpers/helpers";
+import type { RepairPart, Row } from "@/interfaces";
 import { addPart } from "@/lib/db";
 
 const ADD_NEW = "__add_new__";

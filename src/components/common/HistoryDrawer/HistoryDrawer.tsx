@@ -18,9 +18,9 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Label } from "@/components/ui/label";
 
 import { db } from "@/lib/db";
-import { CustomInput } from "@/components/custom/CustomInput";
-import { formatMoney } from "../helpers/helpers";
-import { useConfirmation } from "../hooks/useConfirmation";
+import { CustomInput } from "@/components/common/customs/CustomInput";
+import { formatMoney } from "@/helpers/helpers";
+import { useConfirmation } from "@/components/common/HistoryDrawer/useConfirmation";
 
 interface Props {
   repairQuoteId: number | null;

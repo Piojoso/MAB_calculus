@@ -6,7 +6,7 @@ import type {
   RepairQuote,
   RepairQuoteStatus,
   Row,
-} from "@/modules/home/interfaces";
+} from "@/interfaces";
 import { Dexie, type EntityTable } from "dexie";
 
 export const db = new Dexie("Mab_Quotes_DB") as Dexie & {

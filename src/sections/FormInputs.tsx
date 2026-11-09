@@ -1,6 +1,6 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import type { RepairQuoteStatus } from "../interfaces";
+import type { RepairQuoteStatus } from "@/interfaces";
 
 interface Props {
   advance: number;

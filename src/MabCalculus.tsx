@@ -1,13 +1,13 @@
-import { useMabCalculus } from "../hooks/useMabCalculus";
-import { MabCalculusHeader } from "../components/MabHeader";
-import { MabRepairParts } from "../components/MabRepairParts";
-import { MabClientData } from "../components/MabClientData";
-import { MabTotals } from "../components/MabTotals";
-
 import { Button } from "@/components/ui/button";
 import { Save, Share2 } from "lucide-react";
-import { MabInputs } from "../components/MabInputs";
-import { HistoryDrawer } from "../components/HistoryDrawer";
+
+import { useMabCalculus } from "@/hooks/useMabCalculus";
+import { MabCalculusHeader } from "@/sections/FormHeader";
+import { MabRepairParts } from "@/sections/RepairParts/RepairParts";
+import { MabClientData } from "@/sections/ClientData/ClientData";
+import { MabInputs } from "@/sections/FormInputs";
+import { MabTotals } from "@/sections/FormTotals";
+import { HistoryDrawer } from "@/components/common/HistoryDrawer/HistoryDrawer";
 
 export const MabCalculus = () => {
   const { repairParts, clientData, ...store } = useMabCalculus();

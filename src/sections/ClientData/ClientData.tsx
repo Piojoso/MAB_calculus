@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 
-import { CustomInput } from "@/components/custom/CustomInput";
-import type { DraftClientData, RepairQuoteStatus } from "../interfaces";
+import { CustomInput } from "@/components/common/customs/CustomInput";
+import type { DraftClientData, RepairQuoteStatus } from "@/interfaces";
 
 interface Props {
   name: string;

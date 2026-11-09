@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 
-import type { DraftClientData } from "../interfaces";
+import type { DraftClientData } from "@/interfaces";
 import * as db from "@/lib/db";
 
 export const useClientData = () => {
